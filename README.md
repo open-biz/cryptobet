@@ -22,17 +22,17 @@ SendBet transforms organic Twitter sports debates into actual blockchain-based w
 
 ```mermaid
 graph TD
-    A[👤 User A: "Messi will score 2+ goals tonight"] --> B[👤 User B: "@SendBet challenge $50"]
-    B --> C[🤖 @SendBet Bot detects mention]
+    A[👤 User A makes prediction] --> B[👤 User B challenges with @SendBet]
+    B --> C[🤖 SendBet Bot detects mention]
     C --> D[📱 Bot replies with bet link]
-    D --> E[👤 User A: "@SendBet accept"]
-    E --> F[💻 Users visit sendbet.app/bet/tweetId]
-    F --> G[🔗 Connect wallets & deposit USDT]
+    D --> E[👤 User A accepts challenge]
+    E --> F[💻 Users visit bet page]
+    F --> G[🔗 Connect wallets and deposit USDT]
     G --> H[📄 Smart contract created on Chiliz Chain]
-    H --> I[⚽ Game happens]
-    I --> J[🔍 Oracle fetches result]
-    J --> K[💰 Winner receives 2x bet amount]
-    K --> L[🐦 @SendBet tweets the result]
+    H --> I[⚽ Sports event happens]
+    I --> J[🔍 Oracle fetches game result]
+    J --> K[💰 Winner receives double bet amount]
+    K --> L[🐦 SendBet announces result]
 ```
 
 ### Example Flow
