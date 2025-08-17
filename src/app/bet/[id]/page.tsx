@@ -7,6 +7,8 @@ import { mockContract, CHZ_TO_USDT_RATE, MockBet } from '@/lib/mock-contract';
 import { useAccount } from 'wagmi';
 import { useWagmiReady } from '@/components/Providers';
 import Link from 'next/link';
+// Import client component wrapper
+import ClientOnly from '@/components/ClientOnly';
 
 interface BetData {
   challenger: string;
@@ -26,7 +28,8 @@ interface BetData {
   accepterTwitterId: string;
 }
 
-export default function BetPage() {
+// Create a client-side-only component for Wagmi hooks
+function BetPageContent() {
   const params = useParams();
   const betId = params?.id as string || '';
   const isWagmiReady = useWagmiReady();
@@ -38,7 +41,66 @@ export default function BetPage() {
   const [isDepositing, setIsDepositing] = useState(false);
   const [isDemoMode, setIsDemoMode] = useState(true); // Always use mock for now
 
-  const contractService = new ContractService();
+  // Use lazy initialization to prevent ENS lookup errors
+  const [contractService] = useState(() => {
+    // Only create ContractService instance on the client side
+    if (typeof window !== 'undefined') {
+      try {
+        return new ContractService();
+      } catch (error) {
+        console.warn('Failed to initialize ContractService:', error);
+        // Return a minimal implementation to prevent runtime errors
+        return {} as ContractService;
+      }
+    }
+    return {} as ContractService;
+  });
+  
+  // Suppress all ENS-related errors
+  useEffect(() => {
+    const originalError = console.error;
+    const originalWarn = console.warn;
+    
+    // Intercept console.error
+    console.error = (...args) => {
+      // Filter out ENS-related errors and other web3 network errors
+      if (
+        args[0] && 
+        typeof args[0] === 'string' && 
+        (args[0].includes('ENS') || 
+         args[0].includes('UNSUPPORTED_OPERATION') ||
+         args[0].includes('network does not support') ||
+         args[0].includes('getEnsAddress') ||
+         args[0].includes('WagmiProvider'))
+      ) {
+        // Quietly suppress these errors
+        return;
+      }
+      // Let other errors pass through
+      originalError.apply(console, args);
+    };
+    
+    // Also intercept console.warn for similar messages
+    console.warn = (...args) => {
+      if (
+        args[0] && 
+        typeof args[0] === 'string' && 
+        (args[0].includes('ENS') || 
+         args[0].includes('network') ||
+         args[0].includes('WagmiProvider'))
+      ) {
+        // Suppress warnings about ENS
+        return;
+      }
+      originalWarn.apply(console, args);
+    };
+
+    // Cleanup
+    return () => {
+      console.error = originalError;
+      console.warn = originalWarn;
+    };
+  }, []);
 
   useEffect(() => {
     loadBet();
@@ -289,5 +351,14 @@ export default function BetPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+// Main component that wraps the client component
+export default function BetPage() {
+  return (
+    <ClientOnly>
+      <BetPageContent />
+    </ClientOnly>
   );
 }

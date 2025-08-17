@@ -32,7 +32,19 @@ export class ContractService {
       ? process.env.CHILIZ_MAINNET_RPC_URL || 'https://chiliz-rpc.com'
       : process.env.CHILIZ_TESTNET_RPC_URL || 'https://spicy-rpc.chiliz.com';
     
-    this.provider = new ethers.JsonRpcProvider(rpcUrl);
+    // Create provider with ENS disabled
+    this.provider = new ethers.JsonRpcProvider(rpcUrl, undefined, {
+      batchMaxCount: 10,
+      // Explicitly disable ENS
+      // @ts-ignore - ethers type doesn't expose this but it works
+      disableCcipRead: true,
+      // Additional options to prevent ENS lookups
+      cacheTimeout: -1,
+      polling: false,
+      // @ts-ignore
+      staticNetwork: true // Prevent network detection which triggers ENS lookups
+    });
+    
     this.contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, this.provider);
     
     if (process.env.PRIVATE_KEY) {

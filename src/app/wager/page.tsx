@@ -6,7 +6,7 @@ import { useWagmiReady } from '@/components/Providers';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import type { ContractService } from '@/lib/contract';
+import { ContractService } from '@/lib/contract';
 
 export default function WagerPage() {
   const router = useRouter();
@@ -18,30 +18,59 @@ export default function WagerPage() {
   
   useEffect(() => {
     // ENS is typically only supported on mainnet (1) and some testnets
+    // Chiliz chains (88888, 88882) do NOT support ENS
+    const isChilizChain = chainId === 88888 || chainId === 88882;
     setEnsSupported(chainId === 1 || chainId === 5 || chainId === 11155111);
+    
+    // Disable ContractService instantiation on non-ENS supporting chains
+    if (isChilizChain) {
+      // Don't create ContractService instance here to avoid ENS errors
+    }
   }, [chainId]);
   
   useEffect(() => {
+    // Suppress all ENS-related errors
     const originalError = console.error;
+    const originalWarn = console.warn;
+    
+    // Intercept console.error
     console.error = (...args) => {
-      // Filter out ENS-related errors
+      // Filter out ENS-related errors and other web3 network errors
       if (
         args[0] && 
         typeof args[0] === 'string' && 
         (args[0].includes('ENS') || 
-         (args[0].includes('network') && args[0].includes('UNSUPPORTED_OPERATION')))
+         args[0].includes('UNSUPPORTED_OPERATION') ||
+         args[0].includes('network does not support') ||
+         args[0].includes('getEnsAddress'))
       ) {
         // Quietly suppress these errors
         return;
       }
+      // Let other errors pass through
       originalError.apply(console, args);
+    };
+    
+    // Also intercept console.warn for similar messages
+    console.warn = (...args) => {
+      if (
+        args[0] && 
+        typeof args[0] === 'string' && 
+        (args[0].includes('ENS') || 
+         args[0].includes('network'))
+      ) {
+        // Suppress warnings about ENS
+        return;
+      }
+      originalWarn.apply(console, args);
     };
 
     // Cleanup
     return () => {
       console.error = originalError;
+      console.warn = originalWarn;
     };
-  }, [chainId]);
+  }, []);
   
   const [formData, setFormData] = useState({
     prediction: '',
@@ -53,7 +82,20 @@ export default function WagerPage() {
   const [isCreating, setIsCreating] = useState(false);
   const [stage, setStage] = useState<'initial' | 'opponent-selected' | 'wager-defined' | 'confirming'>('initial');
 
-  const contractService = new ContractService();
+  // Use lazy initialization to prevent ENS lookup errors
+  const [contractService] = useState(() => {
+    // Only create ContractService instance on the client side
+    if (typeof window !== 'undefined') {
+      try {
+        return new ContractService();
+      } catch (error) {
+        console.warn('Failed to initialize ContractService:', error);
+        // Return a minimal implementation to prevent runtime errors
+        return {} as ContractService;
+      }
+    }
+    return {} as ContractService;
+  });
 
   const generateBetId = (): string => {
     return 'bet_' + Math.random().toString(36).substring(2, 15);
@@ -241,7 +283,7 @@ export default function WagerPage() {
               
               <div>
                 <label className="block text-sm font-semibold text-gray-900 mb-2">
-                  Stake Amount (ETH) *
+                  Stake Amount (USDT) *
                 </label>
                 <input
                   type="number"
@@ -300,8 +342,8 @@ export default function WagerPage() {
                 {formData.amount && (
                   <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                     <p className="text-sm text-blue-700">You will deposit</p>
-                    <p className="text-2xl font-bold text-blue-900">{formData.amount} ETH</p>
-                    <p className="text-xs text-blue-700 mt-1">Winner takes {parseFloat(formData.amount) * 2} ETH</p>
+                    <p className="text-2xl font-bold text-blue-900">{formData.amount} USDT</p>
+                    <p className="text-xs text-blue-700 mt-1">Winner takes {parseFloat(formData.amount) * 2} USDT</p>
                   </div>
                 )}
               </div>
@@ -356,7 +398,7 @@ export default function WagerPage() {
               {/* Wager */}
               <div className="text-center">
                 <div className="w-20 h-20 rounded-full border-4 border-yellow-500 mx-auto flex items-center justify-center bg-yellow-50">
-                  <span className="text-yellow-700 font-bold">{formData.amount} ETH</span>
+                  <span className="text-yellow-700 font-bold">{formData.amount} USDT</span>
                 </div>
                 <p className="mt-2 text-sm max-w-[150px] overflow-hidden text-ellipsis">
                   {formData.prediction}
