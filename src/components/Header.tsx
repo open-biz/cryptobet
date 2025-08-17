@@ -2,12 +2,32 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useWagmiReady } from './Providers';
+import { useState, useEffect } from 'react';
 
-export default function Header() {
+function DynamicConnectButton() {
+  const [ConnectButton, setConnectButton] = useState<any>(null);
   const isWagmiReady = useWagmiReady();
 
+  useEffect(() => {
+    if (!isWagmiReady) return;
+
+    // Dynamically import ConnectButton only when wagmi is ready
+    import('@rainbow-me/rainbowkit').then(({ ConnectButton: CB }) => {
+      setConnectButton(() => CB);
+    }).catch(error => {
+      console.error('Failed to load ConnectButton:', error);
+    });
+  }, [isWagmiReady]);
+
+  if (!isWagmiReady || !ConnectButton) {
+    return <div className="w-32 h-10 bg-gray-200 rounded-lg animate-pulse" />;
+  }
+
+  return <ConnectButton />;
+}
+
+export default function Header() {
   return (
     <header className="bg-white shadow-sm border-b">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -19,11 +39,7 @@ export default function Header() {
           </div>
           
           <div className="flex items-center space-x-4">
-            {isWagmiReady ? (
-              <ConnectButton />
-            ) : (
-              <div className="w-32 h-10 bg-gray-200 rounded-lg animate-pulse" />
-            )}
+            <DynamicConnectButton />
           </div>
         </div>
       </div>
