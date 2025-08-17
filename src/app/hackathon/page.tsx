@@ -62,15 +62,6 @@ export default function HackathonPage() {
         amount: '0.1',
         gameId: 'game_123',
         status: 'active'
-      },
-      {
-        id: 'bet_2', 
-        prediction: 'Messi will score 2+ goals',
-        challenger: '0x9876...5432',
-        accepter: '0xfedc...ba98',
-        amount: '0.05',
-        gameId: 'game_456',
-        status: 'active'
       }
     ]);
   };

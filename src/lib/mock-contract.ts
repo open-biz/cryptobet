@@ -311,26 +311,6 @@ class MockContractService {
         status: 'active'
       },
       {
-        id: 'bet_demo_2',
-        tweetId: 'twitter_2345678901',
-        prediction: 'Messi will score 2+ goals tonight',
-        challenger: '0x2345678901234567890123456789012345678901',
-        accepter: '0xbcdefabcdefabcdefabcdefabcdefabcdefabcde',
-        amountCHZ: 250, // 10 USDT
-        amountUSDT: 10,
-        gameId: 'soccer_psg_barcelona_20241201',
-        settled: true,
-        winner: '0x2345678901234567890123456789012345678901',
-        createdAt: Date.now() - 7200000, // 2 hours ago
-        challengerDeposited: true,
-        accepterDeposited: true,
-        challengerTwitterHandle: '@messifan',
-        accepterTwitterHandle: '@soccerskeptic',
-        challengerTwitterId: '2345678901',
-        accepterTwitterId: 'bcdefghijk',
-        status: 'settled'
-      },
-      {
         id: 'bet_demo_3',
         tweetId: 'twitter_3456789012',
         prediction: 'Chiefs will win by 2 touchdowns',
