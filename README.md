@@ -15,8 +15,27 @@
 SendBet transforms organic Twitter sports debates into actual blockchain-based wagers. When two users disagree about a sports outcome, they can instantly create a smart contract bet that settles automatically via oracles.
 
 ```
-🐦 Twitter Argument → 🤖 Smart Contract → 💰 Automatic Payout
+🐦 Twitter Argument → 🤖 Smart Contract → 🌉 Cross-Chain Oracle → 💰 Automatic Payout
 ```
+
+## 🏗️ Cross-Chain Architecture
+
+SendBet uses a **cross-chain oracle architecture** combining **Chainlink Functions** and **Hyperlane** for decentralized, automated settlement:
+
+```
+┌─────────────────┐    Hyperlane    ┌──────────────────┐    Functions    ┌─────────────┐
+│   Chiliz Spicy  │ ──────────────> │  Polygon Amoy    │ ─────────────> │  Odds API   │
+│   (Main Bets)   │                 │  (Oracle)        │                │  (Results)  │
+│   CHZ Testnet   │ <────────────── │  MATIC Testnet   │ <───────────── │             │
+└─────────────────┘    Settlement   └──────────────────┘    Response    └─────────────┘
+```
+
+### Why Cross-Chain?
+
+- **🎯 Chiliz Chain**: Optimized for sports betting and fan tokens
+- **⚡ Chainlink Functions**: Serverless oracle with real sports data  
+- **🌉 Hyperlane**: Secure cross-chain messaging
+- **💰 Cost Efficient**: Pay-per-use oracle vs. hosting infrastructure
 
 ## 🎮 How It Works
 
@@ -27,12 +46,16 @@ graph TD
     C --> D[📱 Bot replies with bet link]
     D --> E[👤 User A accepts challenge]
     E --> F[💻 Users visit bet page]
-    F --> G[🔗 Connect wallets and deposit USDT]
-    G --> H[📄 Smart contract created on Chiliz Chain]
+    F --> G[🔗 Connect wallets and deposit CHZ]
+    G --> H[📄 Smart contract created on Chiliz Spicy]
     H --> I[⚽ Sports event happens]
-    I --> J[🔍 Oracle fetches game result]
-    J --> K[💰 Winner receives double bet amount]
-    K --> L[🐦 SendBet announces result]
+    I --> J[🤖 Chainlink Automation triggers settlement]
+    J --> K[🌉 Hyperlane message to Polygon Amoy]
+    K --> L[⚡ Chainlink Functions calls Odds API]
+    L --> M[📊 API returns game result]
+    M --> N[🌉 Hyperlane message back to Chiliz]
+    N --> O[💰 Winner receives double bet amount]
+    O --> P[🐦 SendBet announces result]
 ```
 
 ### Example Flow

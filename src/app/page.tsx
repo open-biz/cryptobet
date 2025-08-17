@@ -1,81 +1,231 @@
+'use client';
+
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
+import LiveBettingFeed from '@/components/LiveBettingFeed';
+import QuickBetCreator from '@/components/QuickBetCreator';
+import LiveTicker from '@/components/LiveTicker';
+import TwitterMonitorControl from '@/components/TwitterMonitorControl';
+import ActiveGames from '@/components/ActiveGames';
 
 export default function HomePage() {
+  // CHZ to USDT conversion rate: 25 CHZ = 1 USDT
+  const CHZ_TO_USDT_RATE = 25;
+
+  const [liveStats, setLiveStats] = useState({
+    totalVolumeCHZ: 12400,
+    totalVolumeUSDT: 12400 / CHZ_TO_USDT_RATE,
+    activeBets: 53,
+    playersOnline: 1247,
+    lastBetAmountCHZ: 234,
+    lastBetAmountUSDT: 234 / CHZ_TO_USDT_RATE
+  });
+
+  // Update stats frequently for live feel
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const newVolumeCHZ = Math.floor(Math.random() * 100);
+      const newLastBetCHZ = Math.floor(Math.random() * 500 + 50);
+      
+      setLiveStats(prev => ({
+        totalVolumeCHZ: prev.totalVolumeCHZ + newVolumeCHZ,
+        totalVolumeUSDT: (prev.totalVolumeCHZ + newVolumeCHZ) / CHZ_TO_USDT_RATE,
+        activeBets: prev.activeBets + (Math.random() > 0.7 ? 1 : 0),
+        playersOnline: prev.playersOnline + Math.floor(Math.random() * 5 - 2),
+        lastBetAmountCHZ: newLastBetCHZ,
+        lastBetAmountUSDT: newLastBetCHZ / CHZ_TO_USDT_RATE
+      }));
+    }, 2000); // Update every 2 seconds
+
+    return () => clearInterval(interval);
+  }, []);
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center p-4">
-      <div className="max-w-4xl mx-auto text-center">
-        <div className="mb-8">
-          <h1 className="text-6xl font-bold text-gray-900 mb-4">
-            Send<span className="text-sendbet-blue">Bet</span>
-          </h1>
-          <p className="text-xl text-gray-600 mb-8">
-            Turn Twitter sports arguments into real money bets
-          </p>
+    <div className="min-h-screen bg-gray-50">
+      {/* Live Ticker */}
+      <LiveTicker />
+      
+      {/* Hero Section - Clean Crypto Style */}
+      <div className="relative border-b border-blue-700">
+        {/* Cover image as background */}
+        <div className="absolute inset-0 w-full h-full overflow-hidden">
+          <Image 
+            src="/images/cover.jpg" 
+            alt="SendBet Cover" 
+            fill 
+            priority
+            className="object-cover object-center brightness-[0.35]" 
+          />
         </div>
+        
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 sm:py-32 relative z-10">
+          <div className="text-center">
+            <div className="flex items-center justify-center gap-2 mb-6">
+              <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+              <span className="text-blue-200 font-medium text-sm">LIVE BETTING PLATFORM</span>
+            </div>
+            
+            <h1 className="text-5xl sm:text-7xl font-bold mb-6 text-white">
+              SendBet
+            </h1>
+            
+            <p className="text-xl text-blue-200 mb-10 max-w-2xl mx-auto">
+              Decentralized sports predictions with USDT smart contracts
+            </p>
+            
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+              <Link href="/wager" className="bg-green-500 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-green-600 transition-all duration-200 w-full sm:w-auto text-center shadow-lg">
+                Create Bet Challenge
+              </Link>
+              <Link href="/bets" className="bg-blue-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-blue-700 transition-all duration-200 w-full sm:w-auto shadow-lg">
+                Browse Active Bets
+              </Link>
+            </div>
+          </div>
+        </div>
+      </div>
 
-        <div className="bg-white rounded-lg shadow-xl p-8 mb-8">
-          <h2 className="text-2xl font-semibold mb-6">How it works</h2>
+      {/* Live Stats Bar - Clean Style */}
+      <div className="bg-white border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 py-6">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 text-center">
+            <div className="bg-gray-50 rounded-lg p-4">
+              <div className="text-2xl sm:text-3xl font-bold text-gray-900">
+                ${liveStats.totalVolumeUSDT.toFixed(2)} USDT <span className="text-sm text-gray-600">({liveStats.totalVolumeCHZ.toFixed(0)} CHZ)</span>
+              </div>
+              <div className="text-sm text-gray-600 mt-1">Total Volume</div>
+            </div>
+            <div className="bg-gray-50 rounded-lg p-4">
+              <div className="text-2xl sm:text-3xl font-bold text-gray-900">
+                {liveStats.activeBets}
+              </div>
+              <div className="text-sm text-gray-600 mt-1">Active Bets</div>
+            </div>
+            <div className="bg-gray-50 rounded-lg p-4">
+              <div className="text-2xl sm:text-3xl font-bold text-gray-900">
+                {liveStats.playersOnline}
+              </div>
+              <div className="text-sm text-gray-600 mt-1">Players Online</div>
+            </div>
+            <div className="bg-gray-50 rounded-lg p-4">
+              <div className="text-2xl sm:text-3xl font-bold text-gray-900">
+                ${liveStats.lastBetAmountUSDT.toFixed(2)} USDT <span className="text-sm text-gray-600">({liveStats.lastBetAmountCHZ.toFixed(0)} CHZ)</span>
+              </div>
+              <div className="text-sm text-gray-600 mt-1">Last Bet</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="grid lg:grid-cols-3 gap-8">
           
-          <div className="grid md:grid-cols-3 gap-6 mb-8">
-            <div className="text-center">
-              <div className="bg-sendbet-blue text-white rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-4">
-                1
+          {/* Live Betting Feed - Clean Style */}
+          <div className="lg:col-span-2">
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+              <div className="p-6 border-b border-gray-200">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-2xl font-bold text-gray-900">
+                    Live Bets
+                  </h2>
+                  <div className="flex items-center gap-2">
+                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                    <span className="text-sm text-gray-600">Live</span>
+                  </div>
+                </div>
+                <p className="text-gray-600 mt-1">Real-time sports betting activity</p>
               </div>
-              <h3 className="font-semibold mb-2">Argue on Twitter</h3>
-              <p className="text-gray-600 text-sm">
-                Disagree about a sports outcome? Challenge your friend with @SendBet
-              </p>
-            </div>
-            
-            <div className="text-center">
-              <div className="bg-sendbet-blue text-white rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-4">
-                2
-              </div>
-              <h3 className="font-semibold mb-2">Create Smart Contract</h3>
-              <p className="text-gray-600 text-sm">
-                Both parties deposit funds into an automated escrow contract
-              </p>
-            </div>
-            
-            <div className="text-center">
-              <div className="bg-sendbet-blue text-white rounded-full w-12 h-12 flex items-center justify-center mx-auto mb-4">
-                3
-              </div>
-              <h3 className="font-semibold mb-2">Auto Settlement</h3>
-              <p className="text-gray-600 text-sm">
-                Oracle confirms the result and winner gets paid automatically
-              </p>
+              <LiveBettingFeed />
             </div>
           </div>
 
-          <div className="bg-gray-50 rounded-lg p-6 mb-6">
-            <h3 className="font-semibold mb-4">Example Bet Flow:</h3>
-            <div className="space-y-2 text-left">
-              <div className="flex items-start gap-2">
-                <span className="text-gray-500">👤</span>
-                <span>"Messi will definitely score 2+ goals tonight 🐐"</span>
+          {/* Sidebar - Clean Style */}
+          <div className="space-y-6">
+            
+            {/* Active Games */}
+            <ActiveGames />
+            
+            {/* Quick Bet Creator */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+              <div className="p-6 border-b border-gray-200">
+                <h3 className="text-xl font-bold text-gray-900">
+                  Create Bet
+                </h3>
+                <p className="text-gray-600 text-sm mt-1">Test the betting interface</p>
               </div>
-              <div className="flex items-start gap-2">
-                <span className="text-gray-500">👤</span>
-                <span>"No way, City's defense is too strong @SendBet challenge $50"</span>
+              <QuickBetCreator />
+            </div>
+
+
+            {/* Popular Sports */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+              <div className="p-6 border-b border-gray-200">
+                <h3 className="text-xl font-bold text-gray-900">
+                  Popular Sports
+                </h3>
               </div>
-              <div className="flex items-start gap-2">
-                <span className="text-gray-500">👤</span>
-                <span>"@SendBet accept"</span>
-              </div>
-              <div className="flex items-start gap-2">
-                <span className="text-sendbet-blue">🤖</span>
-                <span>"✅ Bet created! Both deposit $50 → Winner gets $100"</span>
+              <div className="p-6 space-y-4">
+                <div className="flex items-center justify-between py-2">
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl">⚽</span>
+                    <div>
+                      <p className="font-semibold text-gray-900">Soccer</p>
+                      <p className="text-sm text-gray-500">23 active bets</p>
+                    </div>
+                  </div>
+                  <span className="text-green-600 font-semibold">$1.2k</span>
+                </div>
+                
+                <div className="flex items-center justify-between py-2">
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl">🏀</span>
+                    <div>
+                      <p className="font-semibold text-gray-900">Basketball</p>
+                      <p className="text-sm text-gray-500">18 active bets</p>
+                    </div>
+                  </div>
+                  <span className="text-green-600 font-semibold">$890</span>
+                </div>
+                
+                <div className="flex items-center justify-between py-2">
+                  <div className="flex items-center gap-3">
+                    <span className="text-2xl">🏈</span>
+                    <div>
+                      <p className="font-semibold text-gray-900">Football</p>
+                      <p className="text-sm text-gray-500">12 active bets</p>
+                    </div>
+                  </div>
+                  <span className="text-green-600 font-semibold">$650</span>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
 
-        <div className="text-gray-600">
-          <p className="mb-2">Built on Chiliz Chain • Powered by Smart Contracts</p>
-          <p className="text-sm">
-            Start betting by mentioning <span className="font-mono bg-gray-200 px-2 py-1 rounded">@SendBet</span> in your sports arguments on Twitter
-          </p>
+            {/* How it Works */}
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+              <div className="p-6">
+                <h3 className="text-xl font-bold text-gray-900 mb-4">
+                  How it Works
+                </h3>
+                <div className="space-y-4 text-sm">
+                  <div className="flex items-start gap-3">
+                    <span className="bg-gray-900 text-white rounded-full w-6 h-6 flex items-center justify-center font-semibold text-xs">1</span>
+                    <p className="text-gray-700">Connect your crypto wallet</p>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <span className="bg-gray-900 text-white rounded-full w-6 h-6 flex items-center justify-center font-semibold text-xs">2</span>
+                    <p className="text-gray-700">Tweet @SendBet with your prediction</p>
+                  </div>
+                  <div className="flex items-start gap-3">
+                    <span className="bg-gray-900 text-white rounded-full w-6 h-6 flex items-center justify-center font-semibold text-xs">3</span>
+                    <p className="text-gray-700">Smart contract handles escrow and payouts</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
         </div>
       </div>
     </div>

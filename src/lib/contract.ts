@@ -41,41 +41,41 @@ export class ContractService {
     }
   }
 
-  async createBet(betData: {
-    tweetId: string;
-    prediction: string;
-    challengerAddress: string;
-    accepterAddress: string;
-    gameId: string;
-    challengerTwitterHandle: string;
-    accepterTwitterHandle: string;
-    challengerTwitterId: string;
-    accepterTwitterId: string;
-    amount: string;
-  }) {
+  async createBet(
+    tweetId: string,
+    prediction: string,
+    challengerAddress: string,
+    accepterAddress: string,
+    gameId: string,
+    challengerTwitterHandle: string,
+    accepterTwitterHandle: string,
+    challengerTwitterId: string,
+    accepterTwitterId: string,
+    amountWei: bigint
+  ) {
     if (!this.signer) {
       throw new Error('No signer available for contract interaction');
     }
 
     const tx = await this.contract.createBet(
-      betData.tweetId,
-      betData.prediction,
-      betData.challengerAddress,
-      betData.accepterAddress,
-      betData.gameId,
-      betData.challengerTwitterHandle,
-      betData.accepterTwitterHandle,
-      betData.challengerTwitterId,
-      betData.accepterTwitterId,
-      { value: ethers.parseEther(betData.amount) }
+      tweetId,
+      prediction,
+      challengerAddress,
+      accepterAddress,
+      gameId,
+      challengerTwitterHandle,
+      accepterTwitterHandle,
+      challengerTwitterId,
+      accepterTwitterId,
+      { value: amountWei }
     );
 
     return await tx.wait();
   }
 
-  async getBetByTweetId(tweetId: string): Promise<TwitterBet | null> {
+  async getBet(betId: string): Promise<TwitterBet | null> {
     try {
-      const betData = await this.contract.getBet(tweetId);
+      const betData = await this.contract.getBet(betId);
       
       if (betData.tweetId === '') {
         return null;

@@ -1,7 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { twitterBot } from '@/lib/twitter';
-import { createBet, findBetByTweetId, updateBetStatus } from '@/lib/database';
+import { ContractService } from '@/lib/contract';
 import type { TwitterMention, BetIntent } from '@/types';
+
+const contractService = new ContractService();
 
 interface TwitterWebhookPayload {
   tweet_create_events?: Array<{
@@ -81,16 +83,9 @@ async function handleBetChallenge(tweet: any, betIntent: BetIntent) {
   const gameContext = twitterBot.extractGameContext(betIntent.prediction) || 'upcoming-game';
 
   try {
-    await createBet({
-      tweetId: tweet.id,
-      challengerTwitterId: tweet.user.id,
-      accepterTwitterId: targetUser.id,
-      prediction: betIntent.prediction,
-      amount: betIntent.amount,
-      gameId: gameContext,
-      status: 'pending',
-      createdAt: new Date(),
-    });
+    // For now, we'll track the bet creation in the tweet itself
+    // The actual smart contract creation happens when users visit the bet page and connect wallets
+    // This webhook just validates the format and posts the bet link
 
     const replyMessage = twitterBot.formatBetChallengeReply(
       tweet.user.screen_name,
@@ -119,50 +114,23 @@ async function handleBetAccept(tweet: any, betIntent: BetIntent) {
     return;
   }
 
-  const originalBet = await findBetByTweetId(tweet.in_reply_to_status_id);
-  if (!originalBet) {
-    await twitterBot.replyToTweet(
-      tweet.id,
-      "❌ Original bet not found"
-    );
-    return;
-  }
-
-  if (originalBet.status !== 'pending') {
-    await twitterBot.replyToTweet(
-      tweet.id,
-      "❌ Bet already accepted or expired"
-    );
-    return;
-  }
-
-  if (tweet.user.id !== originalBet.accepterTwitterId) {
-    await twitterBot.replyToTweet(
-      tweet.id,
-      "❌ Only the challenged user can accept this bet"
-    );
-    return;
-  }
-
   try {
-    await updateBetStatus(originalBet.tweetId, 'funded');
+    // For MVP: Simply acknowledge the bet acceptance
+    // The actual bet creation and validation happens when users visit the website
+    const replyMessage = `🎯 Bet Accepted!
 
-    const challenger = await twitterBot.getUserByUsername(originalBet.challengerTwitterId);
-    const accepter = await twitterBot.getUserByUsername(originalBet.accepterTwitterId);
+@${tweet.user.screen_name} has accepted the challenge!
+Both players should now visit:
+🔗 sendbet.app/bet/${tweet.in_reply_to_status_id}
 
-    const replyMessage = twitterBot.formatBetAcceptedReply(
-      challenger?.username || 'challenger',
-      accepter?.username || 'accepter',
-      originalBet.prediction,
-      originalBet.amount
-    );
+Connect wallets and deposit to fund this bet! 💰`;
 
     await twitterBot.replyToTweet(tweet.id, replyMessage);
   } catch (error) {
-    console.error('Error accepting bet:', error);
+    console.error('Error processing bet acceptance:', error);
     await twitterBot.replyToTweet(
       tweet.id,
-      "❌ Error accepting bet. Please try again."
+      "❌ Error processing acceptance. Please try again."
     );
   }
 }

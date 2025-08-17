@@ -1,0 +1,29 @@
+{
+  "name": "sendbet-chainlink-adapter",
+  "version": "1.0.0",
+  "description": "Chainlink External Adapter for SendBet using The Odds API",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "npm run test:unit",
+    "test:unit": "mocha test/unit --timeout 5000 --recursive",
+    "test:integration": "mocha test/integration --timeout 30000 --recursive"
+  },
+  "dependencies": {
+    "@chainlink/ea-bootstrap": "^2.5.2",
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "chai": "^4.3.7",
+    "mocha": "^10.2.0"
+  },
+  "keywords": [
+    "chainlink",
+    "external-adapter",
+    "oracle",
+    "sports-betting",
+    "odds-api"
+  ],
+  "author": "SendBet Team",
+  "license": "MIT"
+}
