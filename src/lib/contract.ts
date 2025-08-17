@@ -29,7 +29,7 @@ export class ContractService {
 
   constructor() {
     const rpcUrl = process.env.NODE_ENV === 'production' 
-      ? process.env.CHILIZ_MAINNET_RPC_URL || 'https://chiliz-rpc.com'
+      ? process.env.CHILIZ_MAINNET_RPC_URL || 'https://rpc.chiliz.com'
       : process.env.CHILIZ_TESTNET_RPC_URL || 'https://spicy-rpc.chiliz.com';
     
     // Create provider with ENS disabled

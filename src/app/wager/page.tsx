@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { useAccount, useChainId } from 'wagmi';
 import { useWagmiReady } from '@/components/Providers';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -10,23 +9,54 @@ import { ContractService } from '@/lib/contract';
 
 export default function WagerPage() {
   const router = useRouter();
-  const { address, isConnected } = useAccount();
   const isWagmiReady = useWagmiReady();
-  const chainId = useChainId();
+  const [address, setAddress] = useState<string>('');
+  const [isConnected, setIsConnected] = useState(false);
+  const [chainId, setChainId] = useState<number>(1);
   
   const [ensSupported, setEnsSupported] = useState(false);
   
   useEffect(() => {
-    // ENS is typically only supported on mainnet (1) and some testnets
-    // Chiliz chains (88888, 88882) do NOT support ENS
-    const isChilizChain = chainId === 88888 || chainId === 88882;
-    setEnsSupported(chainId === 1 || chainId === 5 || chainId === 11155111);
+    if (!isWagmiReady) return;
     
-    // Disable ContractService instantiation on non-ENS supporting chains
-    if (isChilizChain) {
-      // Don't create ContractService instance here to avoid ENS errors
-    }
-  }, [chainId]);
+    // Import wagmi hooks only when ready
+    import('wagmi').then(({ useAccount, useChainId }) => {
+      // These hooks will only work inside React components, but we need the values
+      // We'll handle this differently by checking wagmi state directly
+    });
+  }, [isWagmiReady]);
+  
+  useEffect(() => {
+    if (!isWagmiReady) return;
+    
+    // Get wagmi state when ready
+    const checkWalletState = async () => {
+      try {
+        const { getAccount, getChainId } = await import('wagmi/actions');
+        const { config } = await import('@/lib/wagmi');
+        
+        const account = getAccount(config);
+        const currentChainId = getChainId(config);
+        
+        setAddress(account.address || '');
+        setIsConnected(account.isConnected);
+        setChainId(currentChainId);
+        
+        // ENS is typically only supported on mainnet (1) and some testnets
+        // Chiliz chains (88888, 88882) do NOT support ENS
+        const isChilizChain = currentChainId === 88888 || currentChainId === 88882;
+        setEnsSupported(currentChainId === 1 || currentChainId === 5 || currentChainId === 11155111);
+      } catch (error) {
+        console.error('Error getting wallet state:', error);
+      }
+    };
+    
+    checkWalletState();
+    
+    // Set up interval to check wallet state periodically
+    const interval = setInterval(checkWalletState, 1000);
+    return () => clearInterval(interval);
+  }, [isWagmiReady]);
   
   useEffect(() => {
     // Suppress all ENS-related errors
