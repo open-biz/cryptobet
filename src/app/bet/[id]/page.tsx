@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
 import { ContractService } from '@/lib/contract';
+import { mockContract, CHZ_TO_USDT_RATE, MockBet } from '@/lib/mock-contract';
 import { useAccount } from 'wagmi';
 import { useWagmiReady } from '@/components/Providers';
 import Link from 'next/link';
@@ -27,40 +28,36 @@ interface BetData {
 
 export default function BetPage() {
   const params = useParams();
-  const betId = params.id as string;
+  const betId = params?.id as string || '';
   const isWagmiReady = useWagmiReady();
   const { address } = useAccount();
   
-  const [bet, setBet] = useState<BetData | null>(null);
+  const [bet, setBet] = useState<MockBet | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isDepositing, setIsDepositing] = useState(false);
-  const [isDemoMode, setIsDemoMode] = useState(false);
+  const [isDemoMode, setIsDemoMode] = useState(true); // Always use mock for now
 
   const contractService = new ContractService();
 
   useEffect(() => {
-    if (isWagmiReady) {
-      loadBet();
-    }
-  }, [betId, isWagmiReady]);
+    loadBet();
+  }, [betId]);
 
   const loadBet = async () => {
     try {
       setLoading(true);
       
-      // Check if we have a deployed contract address
-      const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
-      if (!contractAddress || contractAddress === 'deployed_contract_address') {
-        // Demo mode - show mock data
-        setDemoMode(betId);
-        setIsDemoMode(true);
-        return;
+      // Always use mock contract for now
+      let betData: MockBet | null = null;
+      
+      if (betId.startsWith('twitter_')) {
+        betData = await mockContract.getBetByTweetId(betId);
+      } else {
+        betData = await mockContract.getBetById(betId);
       }
       
-      const betData = await contractService.getBet(betId);
-      
-      if (betData && betData.challenger !== '0x0000000000000000000000000000000000000000') {
+      if (betData) {
         setBet(betData);
       } else {
         setError('Bet not found');
@@ -73,49 +70,19 @@ export default function BetPage() {
     }
   };
 
-  const setDemoMode = (betId: string) => {
-    // Create mock bet data for demo
-    const mockBet: BetData = {
-      challenger: '0x742d35d4B9B30F6d03F8e5D9E5B7F8A1234567890',
-      accepter: '0x8B3f7A9e123456789012345678901234567890AB',
-      tweetId: betId.startsWith('twitter_') ? betId.replace('twitter_', '') : '',
-      prediction: betId.startsWith('twitter_') 
-        ? 'Lakers will beat Warriors by 10+ points' 
-        : 'Real Madrid will score first against Barcelona',
-      amount: BigInt('100000000000000000'), // 0.1 ETH
-      gameId: betId.startsWith('twitter_') 
-        ? 'Lakers vs Warriors - Dec 25' 
-        : 'El Clasico - Real Madrid vs Barcelona',
-      settled: false,
-      winner: '0x0000000000000000000000000000000000000000',
-      createdAt: BigInt(Date.now() / 1000),
-      challengerDeposited: false,
-      accepterDeposited: false,
-      challengerTwitterHandle: '@CryptoSports23',
-      accepterTwitterHandle: '@BetKing_NFT',
-      challengerTwitterId: '1234567890',
-      accepterTwitterId: '0987654321'
-    };
-    
-    setBet(mockBet);
-  };
 
   const handleDeposit = async () => {
     if (!bet || !address) return;
     
     setIsDepositing(true);
     try {
-      if (isDemoMode) {
-        // Demo mode - simulate deposit
-        await new Promise(resolve => setTimeout(resolve, 2000));
-        alert('Demo Mode: Deposit simulated successfully! In production, this would deposit real funds to the smart contract.');
-      } else {
-        await contractService.depositForBet(betId, bet.amount);
-        await loadBet(); // Refresh bet data
-      }
+      // Use mock contract
+      await mockContract.depositForBet(bet.tweetId, address);
+      await loadBet(); // Refresh bet data
+      alert(`Successfully deposited ${bet.amountUSDT} USDT (${bet.amountCHZ} CHZ)!`);
     } catch (err) {
       console.error('Error depositing:', err);
-      alert('Error depositing funds');
+      alert('Error depositing funds: ' + (err as Error).message);
     } finally {
       setIsDepositing(false);
     }
@@ -126,7 +93,7 @@ export default function BetPage() {
   const userDeposited = address === bet?.challenger ? bet?.challengerDeposited : bet?.accepterDeposited;
   const canDeposit = isBetCreator && !userDeposited && !bet?.settled;
 
-  if (!isWagmiReady || loading) {
+  if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
@@ -155,23 +122,21 @@ export default function BetPage() {
     );
   }
 
-  const amountInEth = Number(bet.amount) / 1e18;
+  const { amountUSDT, amountCHZ } = bet;
 
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-4xl mx-auto px-4 py-8">
         
-        {/* Demo Mode Banner */}
-        {isDemoMode && (
-          <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6 text-center">
-            <div className="text-yellow-800">
-              <h3 className="font-semibold mb-1">🚧 Demo Mode</h3>
-              <p className="text-sm">
-                Smart contract not deployed yet. This is a preview of the betting interface.
-              </p>
-            </div>
+        {/* Mock Mode Banner */}
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6 text-center">
+          <div className="text-blue-800">
+            <h3 className="font-semibold mb-1">🧪 Development Mode</h3>
+            <p className="text-sm">
+              Using mock smart contract data. All transactions are simulated locally.
+            </p>
           </div>
-        )}
+        </div>
         
         {/* Header */}
         <div className="text-center mb-8">
@@ -255,8 +220,15 @@ export default function BetPage() {
                   <p className="text-sm text-green-700">Each player deposits</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-3xl font-bold text-green-600">{amountInEth} ETH</p>
-                  <p className="text-sm text-green-700">Winner takes {amountInEth * 2} ETH</p>
+                  <p className="text-3xl font-bold text-green-600">
+                    ${amountUSDT} USDT
+                  </p>
+                  <p className="text-sm text-green-700">
+                    ({amountCHZ} CHZ)
+                  </p>
+                  <p className="text-xs text-green-600 mt-1">
+                    Winner takes ${amountUSDT * 2} USDT ({amountCHZ * 2} CHZ)
+                  </p>
                 </div>
               </div>
             </div>
@@ -269,7 +241,7 @@ export default function BetPage() {
                   disabled={isDepositing}
                   className="bg-black text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-800 transition-colors disabled:opacity-50"
                 >
-                  {isDepositing ? 'Depositing...' : `Deposit ${amountInEth} ETH`}
+                  {isDepositing ? 'Depositing...' : `Deposit $${amountUSDT} USDT (${amountCHZ} CHZ)`}
                 </button>
                 <p className="text-sm text-gray-600 mt-2">
                   Connect your wallet and deposit to participate

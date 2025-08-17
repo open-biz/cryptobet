@@ -8,6 +8,7 @@ import QuickBetCreator from '@/components/QuickBetCreator';
 import LiveTicker from '@/components/LiveTicker';
 import TwitterMonitorControl from '@/components/TwitterMonitorControl';
 import ActiveGames from '@/components/ActiveGames';
+import ChainlinkOddsWidget from '@/components/ChainlinkOddsWidget';
 
 export default function HomePage() {
   // CHZ to USDT conversion rate: 25 CHZ = 1 USDT
@@ -123,26 +124,33 @@ export default function HomePage() {
         <div className="grid lg:grid-cols-3 gap-8">
           
           {/* Live Betting Feed - Clean Style */}
-          <div className="lg:col-span-2">
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+          <div className="lg:col-span-2 flex flex-col">
+            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex-1 flex flex-col h-full">
               <div className="p-6 border-b border-gray-200">
                 <div className="flex items-center justify-between">
-                  <h2 className="text-2xl font-bold text-gray-900">
-                    Live Bets
-                  </h2>
+                  <div>
+                    <h2 className="text-2xl font-bold text-gray-900">
+                      Live Bets
+                    </h2>
+                    <p className="text-gray-600 mt-1">See what others are betting on in real-time</p>
+                  </div>
                   <div className="flex items-center gap-2">
                     <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
                     <span className="text-sm text-gray-600">Live</span>
                   </div>
                 </div>
-                <p className="text-gray-600 mt-1">Real-time sports betting activity</p>
               </div>
-              <LiveBettingFeed />
+              <div className="flex-1 overflow-auto">
+                <LiveBettingFeed />
+              </div>
             </div>
           </div>
 
           {/* Sidebar - Clean Style */}
           <div className="space-y-6">
+            
+            {/* Chainlink Odds Widget */}
+            <ChainlinkOddsWidget />
             
             {/* Active Games */}
             <ActiveGames />

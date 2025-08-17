@@ -24,7 +24,7 @@ const CONTRACT_ABI = [
 
 export class ContractService {
   private provider: ethers.JsonRpcProvider;
-  private contract: ethers.Contract;
+  private contract: ethers.Contract & Record<string, any>;
   private signer?: ethers.Signer;
 
   constructor() {
@@ -37,7 +37,8 @@ export class ContractService {
     
     if (process.env.PRIVATE_KEY) {
       this.signer = new ethers.Wallet(process.env.PRIVATE_KEY, this.provider);
-      this.contract = this.contract.connect(this.signer);
+      // Fix TypeScript error by using the Contract type with index signature
+      this.contract = this.contract.connect(this.signer) as typeof this.contract;
     }
   }
 
@@ -120,6 +121,11 @@ export class ContractService {
     }
   }
 
+  // Add missing method to fix references
+  async getBetByTweetId(tweetId: string): Promise<TwitterBet | null> {
+    return this.getBet(tweetId);
+  }
+  
   async getAllActiveBets(): Promise<TwitterBet[]> {
     try {
       const activeBetIds = await this.contract.getBetsByStatus(false);
@@ -209,7 +215,7 @@ export class ContractService {
   }
 
   getContractWithSigner(signer: ethers.Signer) {
-    return new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+    return new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer) as ethers.Contract & Record<string, any>;
   }
 }
 

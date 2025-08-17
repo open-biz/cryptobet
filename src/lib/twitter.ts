@@ -38,15 +38,17 @@ export class TwitterBot {
           'tweet.fields': ['created_at', 'context_annotations', 'referenced_tweets'],
         }
       );
-
-      return mentions.data?.map(tweet => ({
+      
+      // Fix TypeScript error by accessing tweets through data property
+      const tweets = mentions.data?.data || [];
+      return tweets.map(tweet => ({
         id: tweet.id,
         text: tweet.text,
         author_id: tweet.author_id!,
         created_at: tweet.created_at!,
         referenced_tweets: tweet.referenced_tweets,
         context_annotations: tweet.context_annotations,
-      })) || [];
+      }));
     } catch (error) {
       console.error('Error fetching mentions:', error);
       return [];

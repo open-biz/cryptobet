@@ -2,6 +2,9 @@
 
 import { useState, useEffect } from 'react';
 
+// CHZ to USDT conversion rate: 25 CHZ = 1 USDT
+const CHZ_TO_USDT_RATE = 25;
+
 interface TickerItem {
   id: string;
   type: 'bet_accepted' | 'bet_settled' | 'big_win';
@@ -16,21 +19,21 @@ const mockTickerItems: TickerItem[] = [
     id: '1',
     type: 'bet_accepted',
     text: '@CryptoKing accepted Lakers -5.5 vs Warriors',
-    amount: '2.5 ETH',
+    amount: '2.5 USDT (62.5 CHZ)',
     sport: '🏀'
   },
   {
     id: '2',
     type: 'bet_settled',
     text: '@SportsBetDAO won Chiefs ML vs Bills',
-    amount: '1.8 ETH',
+    amount: '1.8 USDT (45 CHZ)',
     sport: '🏈'
   },
   {
     id: '3',
     type: 'big_win',
     text: '@WhaleWins hit 7-leg parlay!',
-    amount: '12.4 ETH',
+    amount: '0.3 USDT (7.5 CHZ)',
     sport: '💰',
     highlight: true
   },
@@ -38,14 +41,14 @@ const mockTickerItems: TickerItem[] = [
     id: '4',
     type: 'bet_accepted',
     text: '@ManCity_Fan backed Liverpool +1.5',
-    amount: '0.75 ETH',
+    amount: '0.75 USDT (18.75 CHZ)',
     sport: '⚽'
   },
   {
     id: '5',
     type: 'bet_settled',
     text: '@TennisAce won Djokovic straight sets',
-    amount: '3.2 ETH',
+    amount: '3.2 USDT (80 CHZ)',
     sport: '🎾'
   }
 ];
@@ -56,12 +59,15 @@ export default function LiveTicker() {
   useEffect(() => {
     // Add new ticker items every 3-5 seconds for that live feel
     const interval = setInterval(() => {
+      const usdtAmount = (Math.random() * 3 + 0.1).toFixed(1);
+      const chzAmount = (parseFloat(usdtAmount) * CHZ_TO_USDT_RATE).toFixed(1);
+      
       const newItems = [
         {
           id: Date.now().toString(),
           type: 'bet_accepted' as const,
           text: `@User${Math.floor(Math.random() * 1000)} accepted live bet`,
-          amount: `${(Math.random() * 3 + 0.1).toFixed(1)} ETH`,
+          amount: `${usdtAmount} USDT (${chzAmount} CHZ)`,
           sport: ['🏀', '⚽', '🏈', '⚾', '🎾'][Math.floor(Math.random() * 5)]
         }
       ];
