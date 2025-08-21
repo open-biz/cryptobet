@@ -100,10 +100,10 @@ function BetsPageContent() {
     const userRole = isUserChallenger ? 'Challenger' : isUserAccepter ? 'Accepter' : null;
     
     return (
-      <div className="bg-white rounded-lg border border-gray-200 p-4 hover:shadow-md transition-shadow">
+      <div className="bg-white rounded-lg border border-gray-200 p-3 sm:p-4 hover:shadow-md transition-shadow">
         <div className="flex items-start justify-between mb-3">
-          <div className="flex items-center gap-2">
-            <span className="text-xl">{getStatusIcon(bet)}</span>
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="text-lg sm:text-xl">{getStatusIcon(bet)}</span>
             <span className={`px-2 py-1 rounded-full text-xs font-semibold border ${getStatusColor(bet)}`}>
               {bet.status.toUpperCase()}
             </span>
@@ -113,7 +113,7 @@ function BetsPageContent() {
               </span>
             )}
           </div>
-          <span className="text-sm text-gray-500">{formatTimeAgo(bet.createdAt)}</span>
+          <span className="text-xs sm:text-sm text-gray-500 flex-shrink-0">{formatTimeAgo(bet.createdAt)}</span>
         </div>
         
         <h3 className="font-semibold text-gray-900 mb-2 line-clamp-2">
@@ -204,14 +204,14 @@ function BetsPageContent() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <div className="max-w-6xl mx-auto px-4 py-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+        <div className="text-center mb-6 sm:mb-8">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
             Betting Activity
           </h1>
-          <p className="text-gray-600">
+          <p className="text-gray-600 text-sm sm:text-base px-4">
             Track your bets and discover active wagers from the community
           </p>
         </div>
@@ -280,7 +280,7 @@ function BetsPageContent() {
                     </Link>
                   </div>
                 ) : (
-                  <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                  <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                     {userBets.map((bet) => (
                       <BetCard key={bet.id} bet={bet} showUserRole={true} />
                     ))}
@@ -312,7 +312,7 @@ function BetsPageContent() {
                         {recentBets.length} bet{recentBets.length !== 1 ? 's' : ''}
                       </span>
                     </div>
-                    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+                    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                       {recentBets.map((bet) => (
                         <BetCard key={bet.id} bet={bet} />
                       ))}

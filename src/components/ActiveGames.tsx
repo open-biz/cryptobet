@@ -161,10 +161,10 @@ export default function ActiveGames() {
           <div className="space-y-4">
             {games.map((game) => (
               <Link href={`/wager?game=${game.id}`} key={game.id} className="block">
-                <div className="border border-gray-200 rounded-lg p-4 hover:bg-blue-50 transition-colors cursor-pointer">
+                <div className="border border-gray-200 rounded-lg p-3 sm:p-4 hover:bg-blue-50 transition-colors cursor-pointer">
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex items-center gap-2">
-                      <span className="text-lg">{getSportEmoji(game.sport_key)}</span>
+                      <span className="text-base sm:text-lg">{getSportEmoji(game.sport_key)}</span>
                       <span className="text-xs bg-blue-600 text-white px-2 py-1 rounded-full font-medium">
                         {game.sport_title}
                       </span>
@@ -176,9 +176,9 @@ export default function ActiveGames() {
                     </div>
                   </div>
                   
-                  <div className="flex justify-between items-center">
-                    <div className="text-sm flex-1">
-                      <p className="font-semibold text-gray-900 mb-1">
+                  <div className="space-y-3">
+                    <div className="text-sm">
+                      <p className="font-semibold text-gray-900 mb-1 text-sm sm:text-base">
                         {game.away_team} @ {game.home_team}
                       </p>
                       <p className="text-gray-500 text-xs">
@@ -192,27 +192,30 @@ export default function ActiveGames() {
                     </div>
                     
                     {game.odds && (
-                      <div className="flex gap-2">
+                      <div className="grid grid-cols-2 sm:flex gap-2">
                         <div className="text-center">
-                          <div className="bg-gray-100 px-3 py-1.5 rounded-lg">
-                            <div className="text-xs text-gray-500 mb-1">{game.home_team}</div>
-                            <div className="text-sm font-bold">{game.odds.home.toFixed(2)} USDT <span className="text-xs text-gray-500">({(game.odds.home * CHZ_TO_USDT_RATE).toFixed(0)} CHZ)</span></div>
+                          <div className="bg-gray-100 px-2 sm:px-3 py-1.5 rounded-lg">
+                            <div className="text-xs text-gray-500 mb-1 truncate">{game.home_team.split(' ')[0]}</div>
+                            <div className="text-xs sm:text-sm font-bold">{game.odds.home.toFixed(2)}</div>
+                            <div className="text-xs text-gray-500">USDT</div>
                           </div>
                         </div>
                         
                         {game.odds.draw !== undefined && (
-                          <div className="text-center">
-                            <div className="bg-gray-100 px-3 py-1.5 rounded-lg">
+                          <div className="text-center col-span-2 sm:col-span-1">
+                            <div className="bg-gray-100 px-2 sm:px-3 py-1.5 rounded-lg">
                               <div className="text-xs text-gray-500 mb-1">Draw</div>
-                              <div className="text-sm font-bold">{game.odds.draw.toFixed(2)} USDT <span className="text-xs text-gray-500">({(game.odds.draw * CHZ_TO_USDT_RATE).toFixed(0)} CHZ)</span></div>
+                              <div className="text-xs sm:text-sm font-bold">{game.odds.draw.toFixed(2)}</div>
+                              <div className="text-xs text-gray-500">USDT</div>
                             </div>
                           </div>
                         )}
                         
                         <div className="text-center">
-                          <div className="bg-gray-100 px-3 py-1.5 rounded-lg">
-                            <div className="text-xs text-gray-500 mb-1">{game.away_team}</div>
-                            <div className="text-sm font-bold">{game.odds.away.toFixed(2)} USDT <span className="text-xs text-gray-500">({(game.odds.away * CHZ_TO_USDT_RATE).toFixed(0)} CHZ)</span></div>
+                          <div className="bg-gray-100 px-2 sm:px-3 py-1.5 rounded-lg">
+                            <div className="text-xs text-gray-500 mb-1 truncate">{game.away_team.split(' ')[0]}</div>
+                            <div className="text-xs sm:text-sm font-bold">{game.odds.away.toFixed(2)}</div>
+                            <div className="text-xs text-gray-500">USDT</div>
                           </div>
                         </div>
                       </div>

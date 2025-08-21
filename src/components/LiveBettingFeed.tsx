@@ -570,133 +570,131 @@ export default function LiveBettingFeed() {
       </div>
       
       {/* Sport Filter - Clean Style */}
-      <div className="flex flex-wrap gap-2 p-3 bg-gray-50 border-b border-gray-200 overflow-x-auto">
-        <button
-          onClick={() => setSportFilter('all')}
-          className={`px-3 py-1.5 text-xs font-medium rounded-full transition-all duration-200 ${
-            sportFilter === 'all'
-              ? 'bg-black text-white'
-              : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-50'
-          }`}
-        >
-          All Sports
-        </button>
-        
-        {uniqueSports.sort().map(sport => (
+      <div className="p-3 bg-gray-50 border-b border-gray-200">
+        <div className="flex gap-2 overflow-x-auto pb-2 mobile-scroll">
           <button
-            key={sport}
-            onClick={() => setSportFilter(sport)}
-            className={`px-3 py-1.5 text-xs font-medium rounded-full transition-all duration-200 flex items-center gap-1 ${
-              sportFilter === sport
+            onClick={() => setSportFilter('all')}
+            className={`px-3 py-1.5 text-xs font-medium rounded-full transition-all duration-200 whitespace-nowrap flex-shrink-0 ${
+              sportFilter === 'all'
                 ? 'bg-black text-white'
                 : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-50'
             }`}
           >
-            <span>{sport}</span>
-            <span className="text-xs opacity-75">
-              ({bets.filter(b => b.sport === sport).length})
-            </span>
+            All Sports
           </button>
-        ))}
+          
+          {uniqueSports.sort().map(sport => (
+            <button
+              key={sport}
+              onClick={() => setSportFilter(sport)}
+              className={`px-3 py-1.5 text-xs font-medium rounded-full transition-all duration-200 flex items-center gap-1 whitespace-nowrap flex-shrink-0 ${
+                sportFilter === sport
+                  ? 'bg-black text-white'
+                  : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-50'
+              }`}
+            >
+              <span>{sport}</span>
+              <span className="text-xs opacity-75">
+                ({bets.filter(b => b.sport === sport).length})
+              </span>
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Betting Feed - Clean Style */}
       <div className="divide-y divide-gray-100 overflow-y-auto h-full">
         {filteredBets.map((bet) => (
-          <div key={bet.id} className="p-6 hover:bg-gray-50 transition-all duration-200 cursor-pointer"
+          <div key={bet.id} className="p-4 sm:p-6 hover:bg-gray-50 transition-all duration-200 cursor-pointer"
                onClick={() => {
                  setSelectedBet(bet);
                  setIsModalOpen(true);
                }}>
-            <div className="flex items-start justify-between">
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-3 mb-3 flex-wrap">
-                  <span className="text-2xl">{bet.sport}</span>
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2 flex-1 min-w-0">
+                  <span className="text-xl sm:text-2xl">{bet.sport}</span>
                   <div className="flex-1 min-w-0">
                     <p className="font-semibold text-gray-900 text-sm sm:text-base truncate">{bet.game}</p>
-                    <p className="text-xs sm:text-sm text-gray-500">{bet.createdAt}</p>
-                  </div>
-                  <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusColor(bet.status)}`}>
-                    {getStatusIcon(bet.status)} {bet.status}
-                  </span>
-                </div>
-                
-                <p className="text-gray-900 mb-3 font-medium text-sm sm:text-base">"{bet.prediction}"</p>
-                
-                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                  <div className="flex items-center gap-2 sm:gap-4 text-xs sm:text-sm flex-wrap">
-                    <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs font-bold">
-                        C
-                      </div>
-                      <span className="text-blue-600 font-semibold">{bet.challengerHandle}</span>
-                    </div>
-                    <span className="text-gray-400">vs</span>
-                    <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center text-white text-xs font-bold">
-                        A
-                      </div>
-                      <span className="text-orange-600 font-semibold">{bet.accepterHandle}</span>
-                    </div>
-                  </div>
-                  
-                  <div className="text-right">
-                    <p className="font-bold text-green-600 text-lg sm:text-xl">{bet.amount}</p>
-                    {bet.tweetUrl && (
-                      <a 
-                        href={bet.tweetUrl} 
-                        target="_blank" 
-                        rel="noopener noreferrer"
-                        onClick={(e) => e.stopPropagation()}
-                        className="text-xs text-blue-600 hover:text-blue-800 underline"
-                      >
-                        View Tweet
-                      </a>
-                    )}
+                    <p className="text-xs text-gray-500">{bet.createdAt}</p>
                   </div>
                 </div>
-                
-                {bet.status === 'pending' && (
-                  <div className="mt-4 flex gap-2 flex-wrap">
-                    <button 
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setSelectedBet(bet);
-                        setIsModalOpen(true);
-                      }}
-                      className="bg-black text-white px-4 py-2 text-xs sm:text-sm rounded-lg font-semibold hover:bg-gray-800 transition-all duration-200"
-                    >
-                      Accept Bet
-                    </button>
-                    <button 
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setSelectedBet(bet);
-                        setIsModalOpen(true);
-                      }}
-                      className="border border-gray-300 text-gray-700 px-4 py-2 text-xs sm:text-sm rounded-lg font-semibold hover:bg-gray-50 transition-all duration-200"
-                    >
-                      View Details
-                    </button>
-                  </div>
-                )}
-                
-                {bet.status === 'active' && (
-                  <div className="mt-4">
-                    <div className="bg-green-50 border border-green-200 rounded-lg p-3">
-                      <p className="text-green-700 text-xs font-semibold">Live bet - awaiting settlement</p>
-                    </div>
-                  </div>
-                )}
-                
-                {bet.status === 'settled' && (
-                  <div className="mt-4">
-                    <div className="bg-gray-50 border border-gray-200 rounded-lg p-3">
-                      <p className="text-gray-700 text-xs font-semibold">Settled - winner paid out</p>
-                    </div>
-                  </div>
-                )}
+                <span className={`px-2 sm:px-3 py-1 rounded-full text-xs font-medium flex-shrink-0 ${getStatusColor(bet.status)}`}>
+                  <span className="hidden sm:inline">{getStatusIcon(bet.status)} </span>{bet.status}
+                </span>
               </div>
+              
+              <p className="text-gray-900 font-medium text-sm pr-4">"{bet.prediction}"</p>
+              
+              <div className="space-y-3">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-xs sm:text-sm">
+                  <div className="flex items-center gap-2">
+                    <div className="w-5 h-5 sm:w-6 sm:h-6 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs font-bold">
+                      C
+                    </div>
+                    <span className="text-blue-600 font-semibold truncate">{bet.challengerHandle}</span>
+                  </div>
+                  <span className="text-gray-400 hidden sm:inline">vs</span>
+                  <div className="flex items-center gap-2">
+                    <div className="w-5 h-5 sm:w-6 sm:h-6 bg-orange-500 rounded-full flex items-center justify-center text-white text-xs font-bold">
+                      A
+                    </div>
+                    <span className="text-orange-600 font-semibold truncate">{bet.accepterHandle}</span>
+                  </div>
+                </div>
+                
+                <div className="flex items-center justify-between">
+                  <p className="font-bold text-green-600 text-base sm:text-lg">{bet.amount.split(' ')[0]} {bet.amount.split(' ')[1]}</p>
+                  {bet.tweetUrl && (
+                    <a 
+                      href={bet.tweetUrl} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      onClick={(e) => e.stopPropagation()}
+                      className="text-xs text-blue-600 hover:text-blue-800 underline"
+                    >
+                      View Tweet
+                    </a>
+                  )}
+                </div>
+              </div>
+                
+              {bet.status === 'pending' && (
+                <div className="flex gap-2">
+                  <button 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedBet(bet);
+                      setIsModalOpen(true);
+                    }}
+                    className="bg-black text-white px-3 sm:px-4 py-2 text-xs sm:text-sm rounded-lg font-semibold hover:bg-gray-800 transition-all duration-200 flex-1 sm:flex-none"
+                  >
+                    Accept Bet
+                  </button>
+                  <button 
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedBet(bet);
+                      setIsModalOpen(true);
+                    }}
+                    className="border border-gray-300 text-gray-700 px-3 sm:px-4 py-2 text-xs sm:text-sm rounded-lg font-semibold hover:bg-gray-50 transition-all duration-200 flex-1 sm:flex-none"
+                  >
+                    Details
+                  </button>
+                </div>
+              )}
+                
+              {bet.status === 'active' && (
+                <div className="bg-green-50 border border-green-200 rounded-lg p-2 sm:p-3">
+                  <p className="text-green-700 text-xs font-semibold">Live bet - awaiting settlement</p>
+                </div>
+              )}
+              
+              {bet.status === 'settled' && (
+                <div className="bg-gray-50 border border-gray-200 rounded-lg p-2 sm:p-3">
+                  <p className="text-gray-700 text-xs font-semibold">Settled - winner paid out</p>
+                </div>
+              )}
             </div>
           </div>
         ))}

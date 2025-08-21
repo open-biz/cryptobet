@@ -75,18 +75,18 @@ export default function QuickBetCreator() {
         <div className="space-y-4">
           <div>
             <label className="block text-sm font-semibold text-gray-900 mb-2">Choose Sport</label>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {sports.map((sport) => (
                 <button
                   key={sport.name}
                   onClick={() => handleInputChange('sport', sport.name)}
-                  className={`p-3 rounded-lg text-center transition-all duration-200 ${
+                  className={`p-2 sm:p-3 rounded-lg text-center transition-all duration-200 ${
                     formData.sport === sport.name
                       ? 'bg-black text-white border-2 border-black'
                       : 'bg-gray-100 border border-gray-300 hover:bg-gray-200 text-gray-900'
                   }`}
                 >
-                  <span className="text-xl block">{sport.emoji}</span>
+                  <span className="text-lg sm:text-xl block">{sport.emoji}</span>
                   <span className="text-xs font-semibold">{sport.name}</span>
                 </button>
               ))}
@@ -139,13 +139,13 @@ export default function QuickBetCreator() {
               rows={3}
             />
             <div className="mt-2">
-              <p className="text-xs text-gray-600 mb-1">Quick templates:</p>
-              <div className="flex flex-wrap gap-1">
+              <p className="text-xs text-gray-600 mb-2">Quick templates:</p>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-1">
                 {predictionTemplates.slice(0, 3).map(template => (
                   <button
                     key={template}
                     onClick={() => handleInputChange('prediction', template)}
-                    className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded hover:bg-gray-200"
+                    className="text-xs bg-gray-100 text-gray-700 px-2 py-2 rounded hover:bg-gray-200 text-left"
                   >
                     {template}
                   </button>
@@ -154,7 +154,7 @@ export default function QuickBetCreator() {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
+          <div className="space-y-4 sm:space-y-0 sm:grid sm:grid-cols-2 sm:gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">Bet Amount</label>
               <div className="relative">
