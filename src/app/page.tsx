@@ -4,11 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import LiveBettingFeed from '@/components/LiveBettingFeed';
-import QuickBetCreator from '@/components/QuickBetCreator';
 import LiveTicker from '@/components/LiveTicker';
-import TwitterMonitorControl from '@/components/TwitterMonitorControl';
-import ActiveGames from '@/components/ActiveGames';
-import ChainlinkOddsWidget from '@/components/ChainlinkOddsWidget';
 
 export default function HomePage() {
   // CHZ to USDT conversion rate: 25 CHZ = 1 USDT
@@ -121,116 +117,144 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-        <div className="grid lg:grid-cols-3 gap-6 sm:gap-8">
+      {/* Main Content - Mobile-First Layout */}
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-8">
+        
+        {/* Mobile-First: Live Bets take full width on mobile */}
+        <div className="space-y-4 lg:grid lg:grid-cols-4 lg:gap-6 lg:space-y-0">
           
-          {/* Live Betting Feed - Mobile-First Design */}
-          <div className="lg:col-span-2 flex flex-col order-1">
-            <div className="bg-gray-50 rounded-xl shadow-sm border border-gray-200 overflow-hidden flex-1 flex flex-col h-full">
-              <div className="bg-white p-4 sm:p-6 border-b border-gray-200">
+          {/* Live Betting Feed - Full width on mobile, 3/4 on desktop */}
+          <div className="lg:col-span-3">
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+              <div className="bg-gradient-to-r from-blue-600 to-purple-600 p-4 text-white">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
-                      🔥 Live Bets
-                    </h2>
-                    <p className="text-gray-600 mt-1 text-sm sm:text-base">Real-time sports betting action</p>
+                    <h1 className="text-xl font-bold">🔥 Live Bets</h1>
+                    <p className="text-blue-100 text-sm">Real-time betting action</p>
                   </div>
-                  <div className="flex items-center gap-2 bg-green-100 px-3 py-1 rounded-full">
-                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                    <span className="text-xs sm:text-sm text-green-700 font-semibold">LIVE</span>
+                  <div className="flex items-center gap-2 bg-white/20 px-3 py-1 rounded-full">
+                    <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                    <span className="text-xs font-semibold">LIVE</span>
                   </div>
                 </div>
               </div>
-              <div className="flex-1 overflow-auto">
+              <div className="min-h-[600px]">
                 <LiveBettingFeed />
               </div>
             </div>
           </div>
 
-          {/* Sidebar - Clean Style */}
-          <div className="space-y-4 sm:space-y-6 order-2">
+          {/* Sidebar - Stacked on mobile, sidebar on desktop */}
+          <div className="space-y-4 lg:col-span-1">
             
-            {/* Chainlink Odds Widget */}
-            <ChainlinkOddsWidget />
-            
-            {/* Active Games */}
-            <ActiveGames />
-            
-            {/* Quick Bet Creator */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-              <div className="p-4 sm:p-6 border-b border-gray-200">
-                <h3 className="text-lg sm:text-xl font-bold text-gray-900">
-                  🎯 Create Bet
-                </h3>
-                <p className="text-gray-600 text-xs sm:text-sm mt-1">Quick bet creation interface</p>
-              </div>
-              <QuickBetCreator />
-            </div>
-
-
-            {/* Popular Sports */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-              <div className="p-4 sm:p-6 border-b border-gray-200">
-                <h3 className="text-lg sm:text-xl font-bold text-gray-900">
-                  🏆 Popular Sports
-                </h3>
-                <p className="text-gray-600 text-xs sm:text-sm mt-1">Top betting categories</p>
-              </div>
-              <div className="p-4 sm:p-6 space-y-3 sm:space-y-4">
-                <div className="flex items-center justify-between py-1 sm:py-2">
-                  <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
-                    <span className="text-xl sm:text-2xl flex-shrink-0">⚽</span>
-                    <div className="min-w-0">
-                      <p className="font-semibold text-gray-900 text-sm sm:text-base">Soccer</p>
-                      <p className="text-xs sm:text-sm text-gray-500">23 bets</p>
-                    </div>
-                  </div>
-                  <span className="text-green-600 font-semibold text-sm sm:text-base flex-shrink-0">$1.2k</span>
-                </div>
-                
-                <div className="flex items-center justify-between py-1 sm:py-2">
-                  <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
-                    <span className="text-xl sm:text-2xl flex-shrink-0">🏀</span>
-                    <div className="min-w-0">
-                      <p className="font-semibold text-gray-900 text-sm sm:text-base">Basketball</p>
-                      <p className="text-xs sm:text-sm text-gray-500">18 bets</p>
-                    </div>
-                  </div>
-                  <span className="text-green-600 font-semibold text-sm sm:text-base flex-shrink-0">$890</span>
-                </div>
-                
-                <div className="flex items-center justify-between py-1 sm:py-2">
-                  <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
-                    <span className="text-xl sm:text-2xl flex-shrink-0">🏈</span>
-                    <div className="min-w-0">
-                      <p className="font-semibold text-gray-900 text-sm sm:text-base">Football</p>
-                      <p className="text-xs sm:text-sm text-gray-500">12 bets</p>
-                    </div>
-                  </div>
-                  <span className="text-green-600 font-semibold text-sm sm:text-base flex-shrink-0">$650</span>
-                </div>
+            {/* Quick Actions - Mobile First */}
+            <div className="bg-gradient-to-br from-green-500 to-blue-600 rounded-2xl p-4 text-white shadow-lg">
+              <h3 className="font-bold text-lg mb-3">🎯 Quick Actions</h3>
+              <div className="space-y-3">
+                <button className="w-full bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-xl p-3 text-left transition-all">
+                  <div className="font-semibold">Create Bet Challenge</div>
+                  <div className="text-xs text-white/80">Start a new wager</div>
+                </button>
+                <button className="w-full bg-white/20 hover:bg-white/30 backdrop-blur-sm rounded-xl p-3 text-left transition-all">
+                  <div className="font-semibold">Browse Active Bets</div>
+                  <div className="text-xs text-white/80">Join existing challenges</div>
+                </button>
               </div>
             </div>
+            
+            {/* Top Games - Compact Mobile Design */}
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+              <div className="bg-gray-50 p-4 border-b border-gray-100">
+                <h3 className="font-bold text-gray-900">🏆 Top Games</h3>
+                <p className="text-xs text-gray-600">Trending matches</p>
+              </div>
+              <div className="p-3 space-y-3">
+                <div className="flex items-center justify-between bg-gray-50 rounded-xl p-3">
+                  <div className="flex items-center gap-3">
+                    <span className="text-lg">⚽</span>
+                    <div>
+                      <div className="font-semibold text-sm">Arsenal vs Man City</div>
+                      <div className="text-xs text-gray-500">Premier League</div>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-sm font-bold text-green-600">$1.2k</div>
+                    <div className="text-xs text-gray-500">23 bets</div>
+                  </div>
+                </div>
+                
+                <div className="flex items-center justify-between bg-gray-50 rounded-xl p-3">
+                  <div className="flex items-center gap-3">
+                    <span className="text-lg">🏀</span>
+                    <div>
+                      <div className="font-semibold text-sm">Lakers vs Warriors</div>
+                      <div className="text-xs text-gray-500">NBA</div>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-sm font-bold text-green-600">$890</div>
+                    <div className="text-xs text-gray-500">18 bets</div>
+                  </div>
+                </div>
+                
+                <div className="flex items-center justify-between bg-gray-50 rounded-xl p-3">
+                  <div className="flex items-center gap-3">
+                    <span className="text-lg">🏈</span>
+                    <div>
+                      <div className="font-semibold text-sm">Chiefs vs Bills</div>
+                      <div className="text-xs text-gray-500">NFL</div>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-sm font-bold text-green-600">$650</div>
+                    <div className="text-xs text-gray-500">12 bets</div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-            {/* How it Works */}
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-              <div className="p-4 sm:p-6">
-                <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4">
-                  💡 How it Works
-                </h3>
-                <div className="space-y-3 sm:space-y-4 text-xs sm:text-sm">
-                  <div className="flex items-start gap-2 sm:gap-3">
-                    <span className="bg-gray-900 text-white rounded-full w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center font-semibold text-xs flex-shrink-0">1</span>
-                    <p className="text-gray-700">Connect your crypto wallet</p>
+            {/* Stats Card - Mobile Optimized */}
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+              <div className="bg-gradient-to-r from-purple-500 to-pink-500 p-4 text-white">
+                <h3 className="font-bold">📊 Platform Stats</h3>
+                <p className="text-xs text-purple-100">Live metrics</p>
+              </div>
+              <div className="p-4 grid grid-cols-2 gap-4">
+                <div className="text-center">
+                  <div className="text-lg font-bold text-gray-900">${liveStats.totalVolumeUSDT.toFixed(0)}</div>
+                  <div className="text-xs text-gray-500">Volume</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-lg font-bold text-gray-900">{liveStats.activeBets}</div>
+                  <div className="text-xs text-gray-500">Active Bets</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-lg font-bold text-gray-900">{liveStats.playersOnline}</div>
+                  <div className="text-xs text-gray-500">Players</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-lg font-bold text-gray-900">${liveStats.lastBetAmountUSDT.toFixed(1)}</div>
+                  <div className="text-xs text-gray-500">Last Bet</div>
+                </div>
+              </div>
+            </div>
+
+            {/* How it Works - Minimal */}
+            <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+              <div className="p-4">
+                <h3 className="font-bold text-gray-900 mb-3">💡 How it Works</h3>
+                <div className="space-y-2 text-sm">
+                  <div className="flex items-center gap-3">
+                    <span className="bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center font-bold text-xs">1</span>
+                    <span className="text-gray-700">Connect wallet</span>
                   </div>
-                  <div className="flex items-start gap-2 sm:gap-3">
-                    <span className="bg-gray-900 text-white rounded-full w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center font-semibold text-xs flex-shrink-0">2</span>
-                    <p className="text-gray-700">Tweet @SendBet with your prediction</p>
+                  <div className="flex items-center gap-3">
+                    <span className="bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center font-bold text-xs">2</span>
+                    <span className="text-gray-700">Make prediction</span>
                   </div>
-                  <div className="flex items-start gap-2 sm:gap-3">
-                    <span className="bg-gray-900 text-white rounded-full w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center font-semibold text-xs flex-shrink-0">3</span>
-                    <p className="text-gray-700">Smart contract handles escrow and payouts</p>
+                  <div className="flex items-center gap-3">
+                    <span className="bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center font-bold text-xs">3</span>
+                    <span className="text-gray-700">Win rewards</span>
                   </div>
                 </div>
               </div>

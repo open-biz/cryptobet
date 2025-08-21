@@ -551,193 +551,161 @@ export default function LiveBettingFeed() {
   }, []);
 
   return (
-    <div className="bg-white">
-      {/* Status Filter Tabs - Clean Style */}
-      <div className="flex border-b border-gray-200">
-        {(['all', 'pending', 'active', 'settled'] as const).map(tab => (
-          <button
-            key={tab}
-            onClick={() => setFilter(tab)}
-            className={`px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm font-semibold capitalize transition-all duration-200 flex-1 ${
-              filter === tab
-                ? 'border-b-2 border-black text-black'
-                : 'text-gray-500 hover:text-gray-700'
-            }`}
-          >
-            <span className="hidden sm:inline">{tab}</span>
-            <span className="sm:hidden">{tab === 'all' ? 'All' : tab === 'pending' ? 'Pending' : tab === 'active' ? 'Live' : 'Done'}</span>
-            {tab !== 'all' && <span className="text-xs ml-1">({bets.filter(b => b.status === tab).length})</span>}
-          </button>
-        ))}
-      </div>
-      
-      {/* Sport Filter - Clean Style */}
-      <div className="p-3 bg-gray-50 border-b border-gray-200">
-        <div className="flex gap-2 overflow-x-auto pb-2 mobile-scroll">
-          <button
-            onClick={() => setSportFilter('all')}
-            className={`px-3 py-1.5 text-xs font-medium rounded-full transition-all duration-200 whitespace-nowrap flex-shrink-0 ${
-              sportFilter === 'all'
-                ? 'bg-black text-white'
-                : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-50'
-            }`}
-          >
-            All Sports
-          </button>
-          
-          {uniqueSports.sort().map(sport => (
+    <div className="h-full">
+      {/* Mobile-First Filters */}
+      <div className="bg-white border-b border-gray-100">
+        {/* Status Tabs */}
+        <div className="flex">
+          {(['all', 'pending', 'active', 'settled'] as const).map(tab => (
             <button
-              key={sport}
-              onClick={() => setSportFilter(sport)}
-              className={`px-3 py-1.5 text-xs font-medium rounded-full transition-all duration-200 flex items-center gap-1 whitespace-nowrap flex-shrink-0 ${
-                sportFilter === sport
-                  ? 'bg-black text-white'
-                  : 'bg-white border border-gray-200 text-gray-700 hover:bg-gray-50'
+              key={tab}
+              onClick={() => setFilter(tab)}
+              className={`flex-1 py-3 px-2 text-xs font-bold transition-all ${
+                filter === tab
+                  ? 'bg-blue-600 text-white'
+                  : 'text-gray-600 hover:bg-gray-50'
               }`}
             >
-              <span>{sport}</span>
-              <span className="text-xs opacity-75">
-                ({bets.filter(b => b.sport === sport).length})
-              </span>
+              {tab === 'all' ? 'All' : tab === 'pending' ? 'Open' : tab === 'active' ? 'Live' : 'Done'}
+              {tab !== 'all' && <span className="ml-1">({bets.filter(b => b.status === tab).length})</span>}
             </button>
           ))}
         </div>
+        
+        {/* Sport Filter - Horizontal Scroll */}
+        <div className="px-3 py-2">
+          <div className="flex gap-2 overflow-x-auto pb-1">
+            <button
+              onClick={() => setSportFilter('all')}
+              className={`px-3 py-1 text-xs font-medium rounded-full whitespace-nowrap ${
+                sportFilter === 'all'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-gray-100 text-gray-700'
+              }`}
+            >
+              All
+            </button>
+            {uniqueSports.sort().map(sport => (
+              <button
+                key={sport}
+                onClick={() => setSportFilter(sport)}
+                className={`px-3 py-1 text-xs font-medium rounded-full whitespace-nowrap ${
+                  sportFilter === sport
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-gray-100 text-gray-700'
+                }`}
+              >
+                {sport}
+              </button>
+            ))}
+          </div>
+        </div>
       </div>
 
-      {/* Betting Feed - Mobile-First Card Design */}
-      <div className="p-2 sm:p-3 space-y-2 sm:space-y-3 overflow-y-auto h-full bg-gray-50">
+      {/* Mobile-First Betting Feed */}
+      <div className="p-3 space-y-3 overflow-y-auto flex-1 bg-gray-50">
         {filteredBets.map((bet) => (
           <div 
             key={bet.id} 
-            className="bg-white border border-gray-200 rounded-xl p-3 sm:p-4 hover:shadow-lg hover:border-gray-300 transition-all duration-200 cursor-pointer max-w-full overflow-hidden"
-            onClick={() => {
-              setSelectedBet(bet);
-              setIsModalOpen(true);
-            }}
+            className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden"
           >
-            {/* Header Row - Sport, Game, Status */}
-            <div className="flex items-start justify-between mb-3">
-              <div className="flex items-center gap-3 flex-1 min-w-0">
-                <span className="text-2xl flex-shrink-0">{bet.sport}</span>
-                <div className="min-w-0">
-                  <h3 className="font-bold text-gray-900 text-sm leading-tight">{bet.game}</h3>
-                  <p className="text-xs text-gray-500">{bet.createdAt}</p>
+            {/* Header - Sport and Status */}
+            <div className="flex items-center justify-between p-3 bg-gray-50 border-b border-gray-100">
+              <div className="flex items-center gap-2">
+                <span className="text-lg">{bet.sport}</span>
+                <div>
+                  <div className="font-bold text-sm text-gray-900">{bet.game}</div>
+                  <div className="text-xs text-gray-500">{bet.createdAt}</div>
                 </div>
               </div>
-              <span className={`px-2 py-1 rounded-full text-xs font-bold flex-shrink-0 ${getStatusColor(bet.status)}`}>
-                {getStatusIcon(bet.status)} {bet.status.toUpperCase()}
+              <span className={`px-2 py-1 rounded-full text-xs font-bold ${getStatusColor(bet.status)}`}>
+                {bet.status === 'pending' ? '⏳' : bet.status === 'active' ? '🔥' : '✅'}
               </span>
             </div>
 
-            {/* Prediction - Full width and prominent */}
-            <div className="mb-4">
-              <p className="text-gray-900 font-semibold text-sm sm:text-base leading-relaxed break-words">"{bet.prediction}"</p>
-            </div>
+            {/* Main Content */}
+            <div className="p-3 space-y-3">
+              {/* Prediction */}
+              <div className="bg-blue-50 rounded-xl p-3">
+                <p className="text-gray-900 font-semibold text-sm leading-relaxed">"{bet.prediction}"</p>
+              </div>
 
-            {/* Players Section - Mobile-optimized vertical layout */}
-            <div className="bg-gradient-to-br from-blue-50 to-orange-50 rounded-lg p-3 mb-4">
-              {/* Mobile: Vertical Stack */}
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                <div className="flex items-center justify-between sm:justify-start sm:flex-1">
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-md">
-                      C
-                    </div>
-                    <div className="min-w-0">
-                      <p className="text-blue-600 font-bold text-sm truncate">{bet.challengerHandle}</p>
-                      <p className="text-xs text-gray-600">Challenger</p>
-                    </div>
+              {/* Players - Simplified */}
+              <div className="flex items-center justify-between bg-gradient-to-r from-blue-50 to-orange-50 rounded-xl p-3">
+                <div className="flex items-center gap-2">
+                  <div className="w-6 h-6 bg-blue-500 rounded-full flex items-center justify-center text-white text-xs font-bold">
+                    C
                   </div>
-                  
-                  <div className="text-gray-400 text-sm font-bold sm:hidden">VS</div>
+                  <span className="text-blue-700 font-bold text-sm truncate max-w-[100px]">{bet.challengerHandle}</span>
                 </div>
                 
-                <div className="hidden sm:block text-gray-500 text-lg font-bold">⚔️</div>
+                <div className="text-gray-400 text-sm font-bold">VS</div>
                 
-                <div className="flex items-center justify-between sm:justify-end sm:flex-1">
-                  <div className="text-gray-400 text-sm font-bold sm:hidden">VS</div>
-                  
-                  <div className="flex items-center gap-2">
-                    <div className="min-w-0 sm:text-right">
-                      <p className="text-orange-600 font-bold text-sm truncate">{bet.accepterHandle}</p>
-                      <p className="text-xs text-gray-600 sm:text-right">Accepter</p>
-                    </div>
-                    <div className="w-8 h-8 bg-orange-500 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-md">
-                      A
-                    </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-orange-700 font-bold text-sm truncate max-w-[100px]">{bet.accepterHandle}</span>
+                  <div className="w-6 h-6 bg-orange-500 rounded-full flex items-center justify-center text-white text-xs font-bold">
+                    A
                   </div>
                 </div>
               </div>
-            </div>
 
-            {/* Amount and Actions - Mobile-first layout */}
-            <div className="space-y-3">
-              {/* Amount row */}
-              <div className="flex items-center justify-center">
-                <div className="bg-green-50 rounded-lg px-4 py-3 text-center">
-                  <p className="text-green-700 font-bold text-lg">{bet.amount}</p>
-                  <p className="text-xs text-green-600">Total Pot</p>
-                </div>
+              {/* Amount */}
+              <div className="text-center bg-green-50 rounded-xl p-3">
+                <div className="text-green-700 font-bold text-lg">{bet.amount.split(' ')[0]} {bet.amount.split(' ')[1]}</div>
+                <div className="text-xs text-green-600">Total Prize Pool</div>
               </div>
-              
-              {/* Actions row - Mobile optimized */}
+
+              {/* Action Buttons */}
               <div className="flex gap-2">
                 {bet.tweetUrl && (
                   <a 
                     href={bet.tweetUrl} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    onClick={(e) => e.stopPropagation()}
-                    className="flex-1 px-3 py-2 bg-blue-100 text-blue-700 rounded-lg text-xs font-semibold hover:bg-blue-200 transition-colors flex items-center justify-center gap-1"
+                    className="flex-1 bg-blue-100 text-blue-700 rounded-xl py-2 px-3 text-xs font-bold text-center hover:bg-blue-200 transition-colors"
                   >
-                    🐦 Tweet
+                    🐦 View Tweet
                   </a>
                 )}
                 <button 
-                  onClick={(e) => {
-                    e.stopPropagation();
+                  onClick={() => {
                     setSelectedBet(bet);
                     setIsModalOpen(true);
                   }}
-                  className="flex-1 px-3 py-2 bg-gray-100 text-gray-700 rounded-lg text-xs font-semibold hover:bg-gray-200 transition-colors"
+                  className="flex-1 bg-gray-100 text-gray-700 rounded-xl py-2 px-3 text-xs font-bold hover:bg-gray-200 transition-colors"
                 >
-                  Details
+                  View Details
                 </button>
               </div>
-            </div>
 
-            {/* Status-specific actions */}
-            {bet.status === 'pending' && (
-              <div className="border-t border-gray-200 pt-3 mt-3">
+              {/* Status Actions */}
+              {bet.status === 'pending' && (
                 <button 
-                  onClick={(e) => {
-                    e.stopPropagation();
+                  onClick={() => {
                     setSelectedBet(bet);
                     setIsModalOpen(true);
                   }}
-                  className="w-full bg-green-600 text-white py-3 rounded-xl text-sm font-bold hover:bg-green-700 transition-colors flex items-center justify-center gap-2"
+                  className="w-full bg-gradient-to-r from-green-500 to-blue-600 text-white rounded-xl py-3 text-sm font-bold hover:from-green-600 hover:to-blue-700 transition-all"
                 >
                   ⚡ Accept Challenge
                 </button>
-              </div>
-            )}
-            
-            {bet.status === 'active' && (
-              <div className="border-t border-gray-200 pt-3 mt-3">
-                <div className="flex items-center justify-center bg-green-50 border border-green-200 rounded-xl p-3">
-                  <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse mr-2"></div>
-                  <p className="text-green-700 text-sm font-bold">🔥 Live Bet - Awaiting Settlement</p>
+              )}
+              
+              {bet.status === 'active' && (
+                <div className="bg-green-50 border border-green-200 rounded-xl p-3 text-center">
+                  <div className="flex items-center justify-center gap-2">
+                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+                    <span className="text-green-700 font-bold text-sm">Live - Awaiting Settlement</span>
+                  </div>
                 </div>
-              </div>
-            )}
-            
-            {bet.status === 'settled' && (
-              <div className="border-t border-gray-200 pt-3 mt-3">
-                <div className="flex items-center justify-center bg-gray-50 border border-gray-200 rounded-xl p-3">
-                  <p className="text-gray-700 text-sm font-bold">✅ Settled - Winner Paid Out</p>
+              )}
+              
+              {bet.status === 'settled' && (
+                <div className="bg-gray-50 border border-gray-200 rounded-xl p-3 text-center">
+                  <span className="text-gray-700 font-bold text-sm">✅ Settled - Winner Paid</span>
                 </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         ))}
       </div>
