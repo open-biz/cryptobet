@@ -46,7 +46,7 @@ function DynamicConnectButton() {
                     <button
                       onClick={openConnectModal}
                       type="button"
-                      className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg"
+                      className="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white font-semibold py-2 px-4 rounded-xl border border-white/20 transition-all text-sm"
                     >
                       Connect Wallet
                     </button>
@@ -54,18 +54,18 @@ function DynamicConnectButton() {
                 }
 
                 return (
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1">
                     <button
                       onClick={openChainModal}
                       type="button"
-                      className="bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-2 px-3 rounded-lg flex items-center gap-1 text-sm"
+                      className="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white font-medium py-2 px-3 rounded-xl flex items-center gap-1 text-xs border border-white/20 transition-all"
                     >
                       {chain.hasIcon && (
                         <div
                           style={{
                             background: chain.iconBackground,
-                            width: 16,
-                            height: 16,
+                            width: 14,
+                            height: 14,
                             borderRadius: 999,
                             overflow: 'hidden',
                           }}
@@ -74,21 +74,23 @@ function DynamicConnectButton() {
                             <img
                               alt={chain.name ?? 'Chain icon'}
                               src={chain.iconUrl}
-                              style={{ width: 16, height: 16 }}
+                              style={{ width: 14, height: 14 }}
                             />
                           )}
                         </div>
                       )}
-                      {chain.name}
+                      <span className="hidden sm:inline">{chain.name}</span>
                     </button>
 
                     <button
                       onClick={openAccountModal}
                       type="button"
-                      className="bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-2 px-3 rounded-lg flex items-center gap-2 text-sm"
+                      className="bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white font-medium py-2 px-3 rounded-xl flex items-center gap-1 text-xs border border-white/20 transition-all"
                     >
-                      {account.displayName}
-                      {account.displayBalance ? ` (${account.displayBalance})` : ''}
+                      <span className="truncate max-w-[80px] sm:max-w-none">{account.displayName}</span>
+                      {account.displayBalance && (
+                        <span className="hidden sm:inline">({account.displayBalance})</span>
+                      )}
                     </button>
                   </div>
                 );
@@ -105,60 +107,72 @@ export default function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <header className="bg-white shadow-sm border-b sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+    <header className="bg-gradient-to-r from-blue-600 to-purple-600 shadow-lg sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-14 sm:h-16">
+          {/* Logo */}
           <div className="flex items-center">
             <Link href="/" className="flex items-center">
-              <Image src="/images/logo.png" alt="SendBet Logo" width={120} height={40} priority className="h-10 w-auto max-w-[100px] sm:max-w-none" />
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 bg-white/20 rounded-xl flex items-center justify-center">
+                  <span className="text-white font-bold text-lg">S</span>
+                </div>
+                <span className="text-white font-bold text-lg sm:text-xl">SendBet</span>
+              </div>
             </Link>
           </div>
           
-          <div className="flex items-center space-x-2">
-            {/* Mobile menu button */}
-            <button
-              className="md:hidden p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            >
-              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={isMobileMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} />
-              </svg>
-            </button>
-            
-            {/* Desktop navigation */}
-            <div className="hidden md:flex items-center space-x-4">
-              <nav className="flex space-x-6">
-                <Link href="/bets" className="text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium">
-                  Live Bets
-                </Link>
-                <Link href="/wager" className="text-gray-700 hover:text-gray-900 px-3 py-2 text-sm font-medium">
-                  Create Bet
-                </Link>
-              </nav>
-            </div>
-            
-            {/* Wallet - always visible */}
-            <DynamicConnectButton />
-          </div>
-        </div>
-
-        {/* Mobile menu */}
-        {isMobileMenuOpen && (
-          <div className="md:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1 border-t border-gray-200">
+          <div className="flex items-center gap-2">
+            {/* Navigation - Mobile First */}
+            <div className="hidden sm:flex items-center gap-1">
               <Link 
                 href="/bets" 
-                className="text-gray-700 hover:text-gray-900 hover:bg-gray-50 block px-3 py-2 text-base font-medium"
-                onClick={() => setIsMobileMenuOpen(false)}
+                className="text-white/90 hover:text-white hover:bg-white/10 px-3 py-2 rounded-xl text-sm font-medium transition-all"
               >
                 Live Bets
               </Link>
               <Link 
                 href="/wager" 
-                className="text-gray-700 hover:text-gray-900 hover:bg-gray-50 block px-3 py-2 text-base font-medium"
-                onClick={() => setIsMobileMenuOpen(false)}
+                className="text-white/90 hover:text-white hover:bg-white/10 px-3 py-2 rounded-xl text-sm font-medium transition-all"
               >
                 Create Bet
+              </Link>
+            </div>
+
+            {/* Mobile menu button */}
+            <button
+              className="sm:hidden p-2 rounded-xl text-white/80 hover:text-white hover:bg-white/10 transition-all"
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            >
+              <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={isMobileMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} />
+              </svg>
+            </button>
+            
+            {/* Wallet - Always visible, mobile optimized */}
+            <div className="scale-90 sm:scale-100">
+              <DynamicConnectButton />
+            </div>
+          </div>
+        </div>
+
+        {/* Mobile menu - Improved design */}
+        {isMobileMenuOpen && (
+          <div className="sm:hidden border-t border-white/20">
+            <div className="py-3 space-y-1">
+              <Link 
+                href="/bets" 
+                className="text-white/90 hover:text-white hover:bg-white/10 block px-3 py-2 rounded-xl text-sm font-medium transition-all"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                🔥 Live Bets
+              </Link>
+              <Link 
+                href="/wager" 
+                className="text-white/90 hover:text-white hover:bg-white/10 block px-3 py-2 rounded-xl text-sm font-medium transition-all"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                🎯 Create Bet
               </Link>
             </div>
           </div>
