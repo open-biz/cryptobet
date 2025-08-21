@@ -125,20 +125,20 @@ export default function HomePage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         <div className="grid lg:grid-cols-3 gap-6 sm:gap-8">
           
-          {/* Live Betting Feed - Clean Style */}
+          {/* Live Betting Feed - Mobile-First Design */}
           <div className="lg:col-span-2 flex flex-col order-1">
-            <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex-1 flex flex-col h-full">
-              <div className="p-4 sm:p-6 border-b border-gray-200">
+            <div className="bg-gray-50 rounded-xl shadow-sm border border-gray-200 overflow-hidden flex-1 flex flex-col h-full">
+              <div className="bg-white p-4 sm:p-6 border-b border-gray-200">
                 <div className="flex items-center justify-between">
                   <div>
                     <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
-                      Live Bets
+                      🔥 Live Bets
                     </h2>
-                    <p className="text-gray-600 mt-1 text-sm sm:text-base hidden sm:block">See what others are betting on in real-time</p>
+                    <p className="text-gray-600 mt-1 text-sm sm:text-base">Real-time sports betting action</p>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 bg-green-100 px-3 py-1 rounded-full">
                     <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                    <span className="text-xs sm:text-sm text-gray-600">Live</span>
+                    <span className="text-xs sm:text-sm text-green-700 font-semibold">LIVE</span>
                   </div>
                 </div>
               </div>
@@ -161,9 +161,9 @@ export default function HomePage() {
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
               <div className="p-4 sm:p-6 border-b border-gray-200">
                 <h3 className="text-lg sm:text-xl font-bold text-gray-900">
-                  Create Bet
+                  🎯 Create Bet
                 </h3>
-                <p className="text-gray-600 text-xs sm:text-sm mt-1">Test the betting interface</p>
+                <p className="text-gray-600 text-xs sm:text-sm mt-1">Quick bet creation interface</p>
               </div>
               <QuickBetCreator />
             </div>
@@ -173,8 +173,9 @@ export default function HomePage() {
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
               <div className="p-4 sm:p-6 border-b border-gray-200">
                 <h3 className="text-lg sm:text-xl font-bold text-gray-900">
-                  Popular Sports
+                  🏆 Popular Sports
                 </h3>
+                <p className="text-gray-600 text-xs sm:text-sm mt-1">Top betting categories</p>
               </div>
               <div className="p-4 sm:p-6 space-y-3 sm:space-y-4">
                 <div className="flex items-center justify-between py-1 sm:py-2">
@@ -216,7 +217,7 @@ export default function HomePage() {
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
               <div className="p-4 sm:p-6">
                 <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4">
-                  How it Works
+                  💡 How it Works
                 </h3>
                 <div className="space-y-3 sm:space-y-4 text-xs sm:text-sm">
                   <div className="flex items-start gap-2 sm:gap-3">

@@ -158,69 +158,76 @@ export default function ActiveGames() {
             </button>
           </div>
         ) : (
-          <div className="space-y-4">
+          <div className="space-y-3">
             {games.map((game) => (
               <Link href={`/wager?game=${game.id}`} key={game.id} className="block">
-                <div className="border border-gray-200 rounded-lg p-3 sm:p-4 hover:bg-blue-50 transition-colors cursor-pointer">
+                <div className="bg-white border border-gray-200 rounded-xl p-4 hover:shadow-lg hover:border-blue-300 transition-all cursor-pointer">
+                  {/* Header */}
                   <div className="flex items-center justify-between mb-3">
-                    <div className="flex items-center gap-2">
-                      <span className="text-base sm:text-lg">{getSportEmoji(game.sport_key)}</span>
-                      <span className="text-xs bg-blue-600 text-white px-2 py-1 rounded-full font-medium">
-                        {game.sport_title}
-                      </span>
+                    <div className="flex items-center gap-3">
+                      <span className="text-2xl">{getSportEmoji(game.sport_key)}</span>
+                      <div>
+                        <span className="text-xs bg-blue-600 text-white px-2 py-1 rounded-full font-bold">
+                          {game.sport_title}
+                        </span>
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full font-medium">
-                        {formatGameTime(game.commence_time)}
-                      </span>
-                    </div>
+                    <span className="text-xs bg-green-100 text-green-700 px-3 py-1 rounded-full font-bold">
+                      {formatGameTime(game.commence_time)}
+                    </span>
                   </div>
                   
-                  <div className="space-y-3">
-                    <div className="text-sm">
-                      <p className="font-semibold text-gray-900 mb-1 text-sm sm:text-base">
-                        {game.away_team} @ {game.home_team}
-                      </p>
-                      <p className="text-gray-500 text-xs">
-                        {new Date(game.commence_time).toLocaleDateString('en-US', {
-                          month: 'short',
-                          day: 'numeric',
-                          hour: '2-digit',
-                          minute: '2-digit'
-                        })}
-                      </p>
-                    </div>
-                    
-                    {game.odds && (
-                      <div className="grid grid-cols-2 sm:flex gap-2">
-                        <div className="text-center">
-                          <div className="bg-gray-100 px-2 sm:px-3 py-1.5 rounded-lg">
-                            <div className="text-xs text-gray-500 mb-1 truncate">{game.home_team.split(' ')[0]}</div>
-                            <div className="text-xs sm:text-sm font-bold">{game.odds.home.toFixed(2)}</div>
-                            <div className="text-xs text-gray-500">USDT</div>
-                          </div>
+                  {/* Game Info */}
+                  <div className="mb-4">
+                    <h3 className="font-bold text-gray-900 text-base mb-1">
+                      {game.away_team} @ {game.home_team}
+                    </h3>
+                    <p className="text-gray-600 text-sm">
+                      {new Date(game.commence_time).toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit'
+                      })}
+                    </p>
+                  </div>
+                  
+                  {/* Odds Cards */}
+                  {game.odds && (
+                    <div className="space-y-2">
+                      <div className="grid grid-cols-2 gap-2">
+                        {/* Home Team */}
+                        <div className="bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 rounded-lg p-3 text-center">
+                          <div className="text-blue-700 font-bold text-sm mb-1">{game.home_team.split(' ')[0]}</div>
+                          <div className="text-blue-800 font-bold text-lg">{game.odds.home.toFixed(2)}</div>
+                          <div className="text-xs text-blue-600">USDT</div>
                         </div>
                         
-                        {game.odds.draw !== undefined && (
-                          <div className="text-center col-span-2 sm:col-span-1">
-                            <div className="bg-gray-100 px-2 sm:px-3 py-1.5 rounded-lg">
-                              <div className="text-xs text-gray-500 mb-1">Draw</div>
-                              <div className="text-xs sm:text-sm font-bold">{game.odds.draw.toFixed(2)}</div>
-                              <div className="text-xs text-gray-500">USDT</div>
-                            </div>
-                          </div>
-                        )}
-                        
-                        <div className="text-center">
-                          <div className="bg-gray-100 px-2 sm:px-3 py-1.5 rounded-lg">
-                            <div className="text-xs text-gray-500 mb-1 truncate">{game.away_team.split(' ')[0]}</div>
-                            <div className="text-xs sm:text-sm font-bold">{game.odds.away.toFixed(2)}</div>
-                            <div className="text-xs text-gray-500">USDT</div>
-                          </div>
+                        {/* Away Team */}
+                        <div className="bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-200 rounded-lg p-3 text-center">
+                          <div className="text-orange-700 font-bold text-sm mb-1">{game.away_team.split(' ')[0]}</div>
+                          <div className="text-orange-800 font-bold text-lg">{game.odds.away.toFixed(2)}</div>
+                          <div className="text-xs text-orange-600">USDT</div>
                         </div>
                       </div>
-                    )}
-                  </div>
+                      
+                      {/* Draw (if exists) */}
+                      {game.odds.draw !== undefined && (
+                        <div className="bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200 rounded-lg p-3 text-center">
+                          <div className="text-gray-700 font-bold text-sm mb-1">Draw</div>
+                          <div className="text-gray-800 font-bold text-lg">{game.odds.draw.toFixed(2)}</div>
+                          <div className="text-xs text-gray-600">USDT</div>
+                        </div>
+                      )}
+                      
+                      {/* Action Button */}
+                      <div className="mt-3">
+                        <div className="w-full bg-green-600 text-white py-2 px-4 rounded-lg text-sm font-bold text-center">
+                          🎯 Create Wager
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </Link>
             ))}

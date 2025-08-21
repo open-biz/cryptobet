@@ -271,58 +271,48 @@ export default function ChainlinkOddsWidget() {
               </div>
 
               <div className="grid grid-cols-2 gap-1 sm:gap-2">
-                <div className="rounded-lg border border-gray-200 p-2 sm:p-3 text-center cursor-pointer hover:bg-blue-50 hover:border-blue-200 transition-colors">
-                  <div className="text-xs text-gray-500 mb-1 truncate">{match.teams.home.split(' ')[0]}</div>
-                  <div className="font-semibold text-blue-600 text-sm sm:text-base">{match.odds.homeWin.toFixed(2)}</div>
-                  <div className="text-xs text-gray-600 mt-1 hidden sm:block">
-                    Win {calculateWinnings(match.odds.homeWin)}
-                    <span className="block text-gray-500 text-[10px]">
-                      USDT
-                    </span>
+                {/* Home Team */}
+                <div className="bg-gradient-to-br from-blue-50 to-blue-100 border border-blue-200 rounded-xl p-3 text-center cursor-pointer hover:from-blue-100 hover:to-blue-200 hover:shadow-md transition-all">
+                  <div className="font-bold text-blue-700 text-sm mb-1">{match.teams.home.split(' ')[0]}</div>
+                  <div className="font-bold text-blue-800 text-lg">{match.odds.homeWin.toFixed(2)}</div>
+                  <div className="text-xs text-blue-600 mt-1">
+                    Win ${calculateWinnings(match.odds.homeWin)}
                   </div>
                 </div>
 
-                <div className="rounded-lg border border-gray-200 p-2 sm:p-3 text-center cursor-pointer hover:bg-blue-50 hover:border-blue-200 transition-colors">
-                  <div className="text-xs text-gray-500 mb-1 truncate">{match.teams.away.split(' ')[0]}</div>
-                  <div className="font-semibold text-blue-600 text-sm sm:text-base">{match.odds.awayWin.toFixed(2)}</div>
-                  <div className="text-xs text-gray-600 mt-1 hidden sm:block">
-                    Win {calculateWinnings(match.odds.awayWin)}
-                    <span className="block text-gray-500 text-[10px]">
-                      USDT
-                    </span>
+                {/* Away Team */}
+                <div className="bg-gradient-to-br from-orange-50 to-orange-100 border border-orange-200 rounded-xl p-3 text-center cursor-pointer hover:from-orange-100 hover:to-orange-200 hover:shadow-md transition-all">
+                  <div className="font-bold text-orange-700 text-sm mb-1">{match.teams.away.split(' ')[0]}</div>
+                  <div className="font-bold text-orange-800 text-lg">{match.odds.awayWin.toFixed(2)}</div>
+                  <div className="text-xs text-orange-600 mt-1">
+                    Win ${calculateWinnings(match.odds.awayWin)}
                   </div>
                 </div>
 
                 {match.odds.draw !== undefined && (
-                  <div className="col-span-2 rounded-lg border border-gray-200 p-2 sm:p-3 text-center cursor-pointer hover:bg-blue-50 hover:border-blue-200 transition-colors">
-                    <div className="text-xs text-gray-500 mb-1">Draw</div>
-                    <div className="font-semibold text-blue-600 text-sm sm:text-base">{match.odds.draw.toFixed(2)}</div>
-                    <div className="text-xs text-gray-600 mt-1 hidden sm:block">
-                      Win {calculateWinnings(match.odds.draw)}
-                      <span className="block text-gray-500 text-[10px]">
-                        USDT
-                      </span>
+                  <div className="col-span-2 bg-gradient-to-br from-gray-50 to-gray-100 border border-gray-200 rounded-xl p-3 text-center cursor-pointer hover:from-gray-100 hover:to-gray-200 hover:shadow-md transition-all">
+                    <div className="font-bold text-gray-700 text-sm mb-1">Draw</div>
+                    <div className="font-bold text-gray-800 text-lg">{match.odds.draw.toFixed(2)}</div>
+                    <div className="text-xs text-gray-600 mt-1">
+                      Win ${calculateWinnings(match.odds.draw)}
                     </div>
                   </div>
                 )}
 
                 {match.odds.overUnder !== undefined && (
-                  <div className="col-span-2 rounded-lg border border-gray-200 p-3 text-center cursor-pointer hover:bg-blue-50 hover:border-blue-200 transition-colors">
-                    <div className="text-xs text-gray-500 mb-1">Over/Under {match.odds.overUnder}</div>
-                    <div className="font-semibold text-blue-600">{match.odds.overUnderLine?.toFixed(2)}</div>
-                    <div className="text-xs text-gray-600 mt-1">
-                      Win {calculateWinnings(match.odds.overUnderLine || 0)} USDT
-                      <span className="block text-gray-500 text-[10px]">
-                        ({(parseFloat(calculateWinnings(match.odds.overUnderLine || 0)) * CHZ_TO_USDT_RATE).toFixed(1)} CHZ)
-                      </span>
+                  <div className="col-span-2 bg-gradient-to-br from-purple-50 to-purple-100 border border-purple-200 rounded-xl p-3 text-center cursor-pointer hover:from-purple-100 hover:to-purple-200 hover:shadow-md transition-all">
+                    <div className="font-bold text-purple-700 text-sm mb-1">O/U {match.odds.overUnder}</div>
+                    <div className="font-bold text-purple-800 text-lg">{match.odds.overUnderLine?.toFixed(2)}</div>
+                    <div className="text-xs text-purple-600 mt-1">
+                      Win ${calculateWinnings(match.odds.overUnderLine || 0)}
                     </div>
                   </div>
                 )}
               </div>
 
-              <div className="mt-2 sm:mt-3 flex justify-end">
-                <button className="text-xs text-blue-600 hover:text-blue-800">
-                  <span className="hidden sm:inline">Create Bet </span>🎮
+              <div className="mt-3">
+                <button className="w-full bg-blue-600 text-white py-2 px-4 rounded-xl text-sm font-semibold hover:bg-blue-700 transition-colors">
+                  🎯 Create Bet
                 </button>
               </div>
             </div>

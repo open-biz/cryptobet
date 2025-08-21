@@ -74,20 +74,20 @@ export default function QuickBetCreator() {
       {step === 1 && (
         <div className="space-y-4">
           <div>
-            <label className="block text-sm font-semibold text-gray-900 mb-2">Choose Sport</label>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+            <label className="block text-base font-bold text-gray-900 mb-3">Choose Sport</label>
+            <div className="grid grid-cols-2 gap-3">
               {sports.map((sport) => (
                 <button
                   key={sport.name}
                   onClick={() => handleInputChange('sport', sport.name)}
-                  className={`p-2 sm:p-3 rounded-lg text-center transition-all duration-200 ${
+                  className={`p-4 rounded-xl text-center transition-all duration-200 border-2 ${
                     formData.sport === sport.name
-                      ? 'bg-black text-white border-2 border-black'
-                      : 'bg-gray-100 border border-gray-300 hover:bg-gray-200 text-gray-900'
+                      ? 'bg-blue-600 text-white border-blue-600 shadow-lg'
+                      : 'bg-white border-gray-200 hover:border-blue-300 hover:shadow-md text-gray-900'
                   }`}
                 >
-                  <span className="text-lg sm:text-xl block">{sport.emoji}</span>
-                  <span className="text-xs font-semibold">{sport.name}</span>
+                  <span className="text-2xl block mb-1">{sport.emoji}</span>
+                  <span className="text-sm font-bold">{sport.name}</span>
                 </button>
               ))}
             </div>
@@ -95,11 +95,11 @@ export default function QuickBetCreator() {
 
           {formData.sport && (
             <div>
-              <label className="block text-sm font-semibold text-gray-900 mb-2">Game/League</label>
+              <label className="block text-base font-bold text-gray-900 mb-3">Game/League</label>
               <select
                 value={formData.game}
                 onChange={(e) => handleInputChange('game', e.target.value)}
-                className="w-full p-3 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-black focus:border-black font-semibold"
+                className="w-full p-4 border-2 border-gray-200 rounded-xl bg-white text-gray-900 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 font-semibold text-base"
               >
                 <option value="">Select a game...</option>
                 {sports.find(s => s.name === formData.sport)?.games.map(game => (
@@ -112,9 +112,9 @@ export default function QuickBetCreator() {
           {formData.game && (
             <button
               onClick={() => setStep(2)}
-              className="w-full bg-black text-white py-3 px-4 rounded-lg font-semibold hover:bg-gray-800 transition-all duration-200"
+              className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-4 px-6 rounded-xl font-bold text-base hover:from-blue-700 hover:to-blue-800 transition-all duration-200 shadow-lg"
             >
-              Next: Create Prediction
+              Next: Create Prediction 🎯
             </button>
           )}
         </div>
@@ -138,14 +138,14 @@ export default function QuickBetCreator() {
               className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               rows={3}
             />
-            <div className="mt-2">
-              <p className="text-xs text-gray-600 mb-2">Quick templates:</p>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-1">
+            <div className="mt-3">
+              <p className="text-sm font-semibold text-gray-700 mb-2">Quick templates:</p>
+              <div className="space-y-2">
                 {predictionTemplates.slice(0, 3).map(template => (
                   <button
                     key={template}
                     onClick={() => handleInputChange('prediction', template)}
-                    className="text-xs bg-gray-100 text-gray-700 px-2 py-2 rounded hover:bg-gray-200 text-left"
+                    className="w-full text-sm bg-blue-50 text-blue-700 px-3 py-2 rounded-lg hover:bg-blue-100 text-left font-medium border border-blue-200"
                   >
                     {template}
                   </button>
@@ -185,9 +185,9 @@ export default function QuickBetCreator() {
           <button
             onClick={() => setStep(3)}
             disabled={!isFormValid}
-            className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
+            className="w-full bg-gradient-to-r from-green-600 to-green-700 text-white py-4 px-6 rounded-xl font-bold text-base hover:from-green-700 hover:to-green-800 transition-all duration-200 shadow-lg disabled:from-gray-300 disabled:to-gray-300 disabled:cursor-not-allowed"
           >
-            Review Bet
+            Review Bet 🔍
           </button>
         </div>
       )}
@@ -240,11 +240,11 @@ export default function QuickBetCreator() {
           <button
             onClick={handleCreateBet}
             disabled={isCreating}
-            className="w-full bg-green-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-green-700 transition-colors disabled:bg-gray-300"
+            className="w-full bg-gradient-to-r from-green-600 to-green-700 text-white py-4 px-6 rounded-xl font-bold text-base hover:from-green-700 hover:to-green-800 transition-all duration-200 shadow-xl disabled:from-gray-300 disabled:to-gray-300"
           >
             {isCreating ? (
               <div className="flex items-center justify-center gap-2">
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
                 Creating Test Bet...
               </div>
             ) : (
