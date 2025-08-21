@@ -126,7 +126,7 @@ export default function HomePage() {
         <div className="grid lg:grid-cols-3 gap-6 sm:gap-8">
           
           {/* Live Betting Feed - Clean Style */}
-          <div className="lg:col-span-2 flex flex-col order-2 lg:order-1">
+          <div className="lg:col-span-2 flex flex-col order-1">
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden flex-1 flex flex-col h-full">
               <div className="p-4 sm:p-6 border-b border-gray-200">
                 <div className="flex items-center justify-between">
@@ -149,7 +149,7 @@ export default function HomePage() {
           </div>
 
           {/* Sidebar - Clean Style */}
-          <div className="space-y-4 sm:space-y-6 order-1 lg:order-2">
+          <div className="space-y-4 sm:space-y-6 order-2">
             
             {/* Chainlink Odds Widget */}
             <ChainlinkOddsWidget />
@@ -159,11 +159,11 @@ export default function HomePage() {
             
             {/* Quick Bet Creator */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-              <div className="p-6 border-b border-gray-200">
-                <h3 className="text-xl font-bold text-gray-900">
+              <div className="p-4 sm:p-6 border-b border-gray-200">
+                <h3 className="text-lg sm:text-xl font-bold text-gray-900">
                   Create Bet
                 </h3>
-                <p className="text-gray-600 text-sm mt-1">Test the betting interface</p>
+                <p className="text-gray-600 text-xs sm:text-sm mt-1">Test the betting interface</p>
               </div>
               <QuickBetCreator />
             </div>
@@ -171,64 +171,64 @@ export default function HomePage() {
 
             {/* Popular Sports */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-              <div className="p-6 border-b border-gray-200">
-                <h3 className="text-xl font-bold text-gray-900">
+              <div className="p-4 sm:p-6 border-b border-gray-200">
+                <h3 className="text-lg sm:text-xl font-bold text-gray-900">
                   Popular Sports
                 </h3>
               </div>
-              <div className="p-6 space-y-4">
-                <div className="flex items-center justify-between py-2">
-                  <div className="flex items-center gap-3">
-                    <span className="text-2xl">⚽</span>
-                    <div>
-                      <p className="font-semibold text-gray-900">Soccer</p>
-                      <p className="text-sm text-gray-500">23 active bets</p>
+              <div className="p-4 sm:p-6 space-y-3 sm:space-y-4">
+                <div className="flex items-center justify-between py-1 sm:py-2">
+                  <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
+                    <span className="text-xl sm:text-2xl flex-shrink-0">⚽</span>
+                    <div className="min-w-0">
+                      <p className="font-semibold text-gray-900 text-sm sm:text-base">Soccer</p>
+                      <p className="text-xs sm:text-sm text-gray-500">23 bets</p>
                     </div>
                   </div>
-                  <span className="text-green-600 font-semibold">$1.2k</span>
+                  <span className="text-green-600 font-semibold text-sm sm:text-base flex-shrink-0">$1.2k</span>
                 </div>
                 
-                <div className="flex items-center justify-between py-2">
-                  <div className="flex items-center gap-3">
-                    <span className="text-2xl">🏀</span>
-                    <div>
-                      <p className="font-semibold text-gray-900">Basketball</p>
-                      <p className="text-sm text-gray-500">18 active bets</p>
+                <div className="flex items-center justify-between py-1 sm:py-2">
+                  <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
+                    <span className="text-xl sm:text-2xl flex-shrink-0">🏀</span>
+                    <div className="min-w-0">
+                      <p className="font-semibold text-gray-900 text-sm sm:text-base">Basketball</p>
+                      <p className="text-xs sm:text-sm text-gray-500">18 bets</p>
                     </div>
                   </div>
-                  <span className="text-green-600 font-semibold">$890</span>
+                  <span className="text-green-600 font-semibold text-sm sm:text-base flex-shrink-0">$890</span>
                 </div>
                 
-                <div className="flex items-center justify-between py-2">
-                  <div className="flex items-center gap-3">
-                    <span className="text-2xl">🏈</span>
-                    <div>
-                      <p className="font-semibold text-gray-900">Football</p>
-                      <p className="text-sm text-gray-500">12 active bets</p>
+                <div className="flex items-center justify-between py-1 sm:py-2">
+                  <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
+                    <span className="text-xl sm:text-2xl flex-shrink-0">🏈</span>
+                    <div className="min-w-0">
+                      <p className="font-semibold text-gray-900 text-sm sm:text-base">Football</p>
+                      <p className="text-xs sm:text-sm text-gray-500">12 bets</p>
                     </div>
                   </div>
-                  <span className="text-green-600 font-semibold">$650</span>
+                  <span className="text-green-600 font-semibold text-sm sm:text-base flex-shrink-0">$650</span>
                 </div>
               </div>
             </div>
 
             {/* How it Works */}
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-              <div className="p-6">
-                <h3 className="text-xl font-bold text-gray-900 mb-4">
+              <div className="p-4 sm:p-6">
+                <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4">
                   How it Works
                 </h3>
-                <div className="space-y-4 text-sm">
-                  <div className="flex items-start gap-3">
-                    <span className="bg-gray-900 text-white rounded-full w-6 h-6 flex items-center justify-center font-semibold text-xs">1</span>
+                <div className="space-y-3 sm:space-y-4 text-xs sm:text-sm">
+                  <div className="flex items-start gap-2 sm:gap-3">
+                    <span className="bg-gray-900 text-white rounded-full w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center font-semibold text-xs flex-shrink-0">1</span>
                     <p className="text-gray-700">Connect your crypto wallet</p>
                   </div>
-                  <div className="flex items-start gap-3">
-                    <span className="bg-gray-900 text-white rounded-full w-6 h-6 flex items-center justify-center font-semibold text-xs">2</span>
+                  <div className="flex items-start gap-2 sm:gap-3">
+                    <span className="bg-gray-900 text-white rounded-full w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center font-semibold text-xs flex-shrink-0">2</span>
                     <p className="text-gray-700">Tweet @SendBet with your prediction</p>
                   </div>
-                  <div className="flex items-start gap-3">
-                    <span className="bg-gray-900 text-white rounded-full w-6 h-6 flex items-center justify-center font-semibold text-xs">3</span>
+                  <div className="flex items-start gap-2 sm:gap-3">
+                    <span className="bg-gray-900 text-white rounded-full w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center font-semibold text-xs flex-shrink-0">3</span>
                     <p className="text-gray-700">Smart contract handles escrow and payouts</p>
                   </div>
                 </div>

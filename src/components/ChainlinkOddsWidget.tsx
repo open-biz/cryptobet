@@ -159,80 +159,82 @@ export default function ChainlinkOddsWidget() {
 
   return (
     <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-      <div className="p-6 border-b border-gray-200 flex items-center justify-between">
-        <div>
-          <div className="flex items-center">
-            <h3 className="text-xl font-bold text-gray-900">
-              Live Odds Feed
-            </h3>
-            <div className="ml-2 bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded-full">
-              Powered by Chainlink
+      <div className="p-4 sm:p-6 border-b border-gray-200">
+        <div className="flex items-start justify-between mb-2">
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center flex-wrap gap-2">
+              <h3 className="text-lg sm:text-xl font-bold text-gray-900">
+                Live Odds
+              </h3>
+              <div className="bg-blue-100 text-blue-800 text-xs px-2 py-0.5 rounded-full">
+                Chainlink
+              </div>
             </div>
+            <p className="text-gray-600 text-xs sm:text-sm mt-1 hidden sm:block">Real-time odds from multiple sports</p>
           </div>
-          <p className="text-gray-600 text-sm mt-1">Real-time odds from multiple sports</p>
-        </div>
-        
-        <div className="flex items-center space-x-1">
-          <Image 
-            src="/images/chainlink-logo.png" 
-            alt="Chainlink" 
-            width={24} 
-            height={24} 
-            className="object-contain"
-          />
-          <span className="text-sm font-medium text-blue-600">Chainlink Oracle</span>
+          
+          <div className="flex items-center space-x-1 flex-shrink-0">
+            <Image 
+              src="/images/chainlink-logo.png" 
+              alt="Chainlink" 
+              width={20} 
+              height={20} 
+              className="object-contain"
+            />
+            <span className="text-xs sm:text-sm font-medium text-blue-600 hidden sm:inline">Oracle</span>
+          </div>
         </div>
       </div>
 
       {/* Sport filter tabs */}
-      <div className="flex overflow-x-auto scrollbar-hide border-b border-gray-200">
+      <div className="flex overflow-x-auto mobile-scroll border-b border-gray-200">
         <button 
           onClick={() => setSelectedSport('all')}
-          className={`px-4 py-3 whitespace-nowrap ${selectedSport === 'all' 
+          className={`px-3 sm:px-4 py-2 sm:py-3 whitespace-nowrap text-xs sm:text-sm ${selectedSport === 'all' 
             ? 'text-blue-600 border-b-2 border-blue-600 font-medium' 
             : 'text-gray-500 hover:text-gray-700'}`}
         >
-          All Sports
+          All
         </button>
         <button 
           onClick={() => setSelectedSport('soccer')}
-          className={`px-4 py-3 whitespace-nowrap ${selectedSport === 'soccer' 
+          className={`px-3 sm:px-4 py-2 sm:py-3 whitespace-nowrap text-xs sm:text-sm ${selectedSport === 'soccer' 
             ? 'text-blue-600 border-b-2 border-blue-600 font-medium' 
             : 'text-gray-500 hover:text-gray-700'}`}
         >
-          ⚽ Soccer
+          ⚽ <span className="hidden sm:inline">Soccer</span>
         </button>
         <button 
           onClick={() => setSelectedSport('basketball')}
-          className={`px-4 py-3 whitespace-nowrap ${selectedSport === 'basketball' 
+          className={`px-3 sm:px-4 py-2 sm:py-3 whitespace-nowrap text-xs sm:text-sm ${selectedSport === 'basketball' 
             ? 'text-blue-600 border-b-2 border-blue-600 font-medium' 
             : 'text-gray-500 hover:text-gray-700'}`}
         >
-          🏀 Basketball
+          🏀 <span className="hidden sm:inline">Basketball</span>
         </button>
         <button 
           onClick={() => setSelectedSport('football')}
-          className={`px-4 py-3 whitespace-nowrap ${selectedSport === 'football' 
+          className={`px-3 sm:px-4 py-2 sm:py-3 whitespace-nowrap text-xs sm:text-sm ${selectedSport === 'football' 
             ? 'text-blue-600 border-b-2 border-blue-600 font-medium' 
             : 'text-gray-500 hover:text-gray-700'}`}
         >
-          🏈 Football
+          🏈 <span className="hidden sm:inline">Football</span>
         </button>
         <button 
           onClick={() => setSelectedSport('baseball')}
-          className={`px-4 py-3 whitespace-nowrap ${selectedSport === 'baseball' 
+          className={`px-3 sm:px-4 py-2 sm:py-3 whitespace-nowrap text-xs sm:text-sm ${selectedSport === 'baseball' 
             ? 'text-blue-600 border-b-2 border-blue-600 font-medium' 
             : 'text-gray-500 hover:text-gray-700'}`}
         >
-          ⚾ Baseball
+          ⚾ <span className="hidden sm:inline">Baseball</span>
         </button>
         <button 
           onClick={() => setSelectedSport('tennis')}
-          className={`px-4 py-3 whitespace-nowrap ${selectedSport === 'tennis' 
+          className={`px-3 sm:px-4 py-2 sm:py-3 whitespace-nowrap text-xs sm:text-sm ${selectedSport === 'tennis' 
             ? 'text-blue-600 border-b-2 border-blue-600 font-medium' 
             : 'text-gray-500 hover:text-gray-700'}`}
         >
-          🎾 Tennis
+          🎾 <span className="hidden sm:inline">Tennis</span>
         </button>
       </div>
 
@@ -249,54 +251,56 @@ export default function ChainlinkOddsWidget() {
           </div>
         ) : (
           filteredMatches.map(match => (
-            <div key={match.id} className="p-4 hover:bg-gray-50 transition-colors">
-              <div className="flex items-center mb-2">
-                <span className="text-lg mr-2">{match.sportEmoji}</span>
-                <span className="text-sm text-gray-500">{match.league}</span>
-                <div className="ml-auto flex items-center text-xs text-gray-500">
-                  <span>{formatMatchDate(match.startTime)}</span>
-                  <span className="mx-1">•</span>
+            <div key={match.id} className="p-3 sm:p-4 hover:bg-gray-50 transition-colors">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center flex-1 min-w-0">
+                  <span className="text-base sm:text-lg mr-2 flex-shrink-0">{match.sportEmoji}</span>
+                  <span className="text-xs sm:text-sm text-gray-500 truncate">{match.league}</span>
+                </div>
+                <div className="flex items-center text-xs text-gray-500 flex-shrink-0">
+                  <span className="hidden sm:inline">{formatMatchDate(match.startTime)}</span>
+                  <span className="hidden sm:inline mx-1">•</span>
                   <span>{formatMatchTime(match.startTime)}</span>
                 </div>
               </div>
 
-              <div className="flex items-center justify-between mb-4">
-                <div className="text-sm font-medium text-gray-900">
+              <div className="mb-3">
+                <div className="text-xs sm:text-sm font-medium text-gray-900">
                   {match.teams.home} vs {match.teams.away}
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-2 mt-2">
-                <div className="rounded-lg border border-gray-200 p-3 text-center cursor-pointer hover:bg-blue-50 hover:border-blue-200 transition-colors">
-                  <div className="text-xs text-gray-500 mb-1">{match.teams.home} Win</div>
-                  <div className="font-semibold text-blue-600">{match.odds.homeWin.toFixed(2)}</div>
-                  <div className="text-xs text-gray-600 mt-1">
-                    Win {calculateWinnings(match.odds.homeWin)} USDT
+              <div className="grid grid-cols-2 gap-1 sm:gap-2">
+                <div className="rounded-lg border border-gray-200 p-2 sm:p-3 text-center cursor-pointer hover:bg-blue-50 hover:border-blue-200 transition-colors">
+                  <div className="text-xs text-gray-500 mb-1 truncate">{match.teams.home.split(' ')[0]}</div>
+                  <div className="font-semibold text-blue-600 text-sm sm:text-base">{match.odds.homeWin.toFixed(2)}</div>
+                  <div className="text-xs text-gray-600 mt-1 hidden sm:block">
+                    Win {calculateWinnings(match.odds.homeWin)}
                     <span className="block text-gray-500 text-[10px]">
-                      ({(parseFloat(calculateWinnings(match.odds.homeWin)) * CHZ_TO_USDT_RATE).toFixed(1)} CHZ)
+                      USDT
                     </span>
                   </div>
                 </div>
 
-                <div className="rounded-lg border border-gray-200 p-3 text-center cursor-pointer hover:bg-blue-50 hover:border-blue-200 transition-colors">
-                  <div className="text-xs text-gray-500 mb-1">{match.teams.away} Win</div>
-                  <div className="font-semibold text-blue-600">{match.odds.awayWin.toFixed(2)}</div>
-                  <div className="text-xs text-gray-600 mt-1">
-                    Win {calculateWinnings(match.odds.awayWin)} USDT
+                <div className="rounded-lg border border-gray-200 p-2 sm:p-3 text-center cursor-pointer hover:bg-blue-50 hover:border-blue-200 transition-colors">
+                  <div className="text-xs text-gray-500 mb-1 truncate">{match.teams.away.split(' ')[0]}</div>
+                  <div className="font-semibold text-blue-600 text-sm sm:text-base">{match.odds.awayWin.toFixed(2)}</div>
+                  <div className="text-xs text-gray-600 mt-1 hidden sm:block">
+                    Win {calculateWinnings(match.odds.awayWin)}
                     <span className="block text-gray-500 text-[10px]">
-                      ({(parseFloat(calculateWinnings(match.odds.awayWin)) * CHZ_TO_USDT_RATE).toFixed(1)} CHZ)
+                      USDT
                     </span>
                   </div>
                 </div>
 
                 {match.odds.draw !== undefined && (
-                  <div className="col-span-2 rounded-lg border border-gray-200 p-3 text-center cursor-pointer hover:bg-blue-50 hover:border-blue-200 transition-colors">
+                  <div className="col-span-2 rounded-lg border border-gray-200 p-2 sm:p-3 text-center cursor-pointer hover:bg-blue-50 hover:border-blue-200 transition-colors">
                     <div className="text-xs text-gray-500 mb-1">Draw</div>
-                    <div className="font-semibold text-blue-600">{match.odds.draw.toFixed(2)}</div>
-                    <div className="text-xs text-gray-600 mt-1">
-                      Win {calculateWinnings(match.odds.draw)} USDT
+                    <div className="font-semibold text-blue-600 text-sm sm:text-base">{match.odds.draw.toFixed(2)}</div>
+                    <div className="text-xs text-gray-600 mt-1 hidden sm:block">
+                      Win {calculateWinnings(match.odds.draw)}
                       <span className="block text-gray-500 text-[10px]">
-                        ({(parseFloat(calculateWinnings(match.odds.draw)) * CHZ_TO_USDT_RATE).toFixed(1)} CHZ)
+                        USDT
                       </span>
                     </div>
                   </div>
@@ -316,9 +320,9 @@ export default function ChainlinkOddsWidget() {
                 )}
               </div>
 
-              <div className="mt-3 flex justify-end">
+              <div className="mt-2 sm:mt-3 flex justify-end">
                 <button className="text-xs text-blue-600 hover:text-blue-800">
-                  Create Bet 🎮
+                  <span className="hidden sm:inline">Create Bet </span>🎮
                 </button>
               </div>
             </div>
