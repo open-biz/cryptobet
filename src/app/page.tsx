@@ -67,7 +67,7 @@ export default function HomePage() {
             
             {/* Subheading */}
             <p className="text-lg sm:text-xl text-white/90 mb-8 max-w-2xl mx-auto px-2">
-              Decentralized sports betting with crypto rewards
+              Turn Twitter sports arguments into bets
             </p>
             
             {/* CTA Buttons - Mobile First */}
