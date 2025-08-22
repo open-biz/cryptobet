@@ -20,14 +20,11 @@ SendBet transforms organic Twitter sports debates into actual blockchain-based w
 
 ## 🏗️ Cross-Chain Architecture
 
-SendBet uses a **cross-chain oracle architecture** combining **Chainlink Functions** and **Hyperlane** for decentralized, automated settlement:
+SendBet uses **cross-chain oracle architecture** for automated settlement:
 
 ```
-┌─────────────────┐    Hyperlane    ┌──────────────────┐    Functions    ┌─────────────┐
-│   Chiliz Spicy  │ ──────────────> │  Polygon Amoy    │ ─────────────> │  Odds API   │
-│   (Main Bets)   │                 │  (Oracle)        │                │  (Results)  │
-│   CHZ Testnet   │ <────────────── │  MATIC Testnet   │ <───────────── │             │
-└─────────────────┘    Settlement   └──────────────────┘    Response    └─────────────┘
+Chiliz Chain 🏈 ← Hyperlane → Polygon Oracle ⚡ ← Functions → Sports API 📊
+    (Bets)                        (Settlement)                  (Results)
 ```
 
 ### Why Cross-Chain?
@@ -39,24 +36,14 @@ SendBet uses a **cross-chain oracle architecture** combining **Chainlink Functio
 
 ## 🎮 How It Works
 
-```mermaid
-graph TD
-    A[👤 User A makes prediction] --> B[👤 User B challenges with @SendBet]
-    B --> C[🤖 SendBet Bot detects mention]
-    C --> D[📱 Bot replies with bet link]
-    D --> E[👤 User A accepts challenge]
-    E --> F[💻 Users visit bet page]
-    F --> G[🔗 Connect wallets and deposit CHZ]
-    G --> H[📄 Smart contract created on Chiliz Spicy]
-    H --> I[⚽ Sports event happens]
-    I --> J[🤖 Chainlink Automation triggers settlement]
-    J --> K[🌉 Hyperlane message to Polygon Amoy]
-    K --> L[⚡ Chainlink Functions calls Odds API]
-    L --> M[📊 API returns game result]
-    M --> N[🌉 Hyperlane message back to Chiliz]
-    N --> O[💰 Winner receives double bet amount]
-    O --> P[🐦 SendBet announces result]
-```
+| Step | Action | Who |
+|------|--------|-----|
+| 1️⃣ | **Tweet Prediction** | User A makes sports prediction on Twitter |
+| 2️⃣ | **Challenge Created** | User B replies `@SendBet challenge $50` |
+| 3️⃣ | **Bot Response** | SendBet bot creates bet link automatically |
+| 4️⃣ | **Accept & Fund** | Both users connect wallets and deposit |
+| 5️⃣ | **Smart Contract** | Bet stored on-chain with oracle settlement |
+| 6️⃣ | **Auto Settlement** | Oracle checks game result and pays winner |
 
 ### Example Flow
 
