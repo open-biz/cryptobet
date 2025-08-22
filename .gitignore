@@ -1,9 +1,13 @@
-# Environment variables
+# Environment variables - NEVER commit these files
 .env
+.env.*
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
+*.env
+.env.backup
+.env.production
 
 # Next.js build output
 .next/
